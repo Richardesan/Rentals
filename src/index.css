@@ -66,3 +66,32 @@
   font-weight: 900;
   font-style: italic;
 }
+.border-gradient {
+  border: 1px solid;
+  border-image-source: linear-gradient(90deg, #0C2D5B 18.75%, rgba(212, 175, 55, 0.7) 100%);
+  border-image-slice: 1;
+  border-radius: 12px;
+}
+.border-gradient {
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(90deg, #0C2D5B 18.75%, rgba(212, 175, 55, 0.7) 100%);
+}
+
+.border-gradient > .inner {
+  border-radius: 10px;
+  background: white;
+  padding: 1rem;
+}
+/* cancel Chrome autofill background */
+@layer components {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: currentColor !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}

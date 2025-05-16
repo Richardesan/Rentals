@@ -14,7 +14,9 @@ const Hero = () => {
           backgroundPosition: "center",
         }}
       >
+
         <div className="bg-black absolute top-0 left-0 w-full h-full opacity-50 z-10"></div>
+
         <section className="absolute right-24 bottom-24">
           <article className="relative w-fit">
             <div className="animate-spin-slow">
@@ -26,8 +28,7 @@ const Hero = () => {
             </div>
           </article>
         </section>
-
-        {/* Navbar needs to be relatively positioned and have a higher z-index */}
+        
         <section className="relative z-20">
           <Navbar />
           <article className="mt-28 w-[30vw] px-2 ">

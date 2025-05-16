@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom'
 const Navbar = () => {
     const linkStyle = "cursor-pointer hover:text-white active:scale-95 hover:scale-105 transistion-all duration-100"
   return (
@@ -13,9 +13,12 @@ const Navbar = () => {
     <li className={linkStyle}>listing</li>
     <li className={linkStyle}>agent</li>
   </ul>
+  <Link to="/signup/tenant">
   <button className={`px-6 py-3 border-primary-light border rounded-full font-semibold ${linkStyle}`}>
     Sign up
   </button>
+  </Link>
+
 </nav>
 
   )
