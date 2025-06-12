@@ -208,7 +208,7 @@ const LoginForm = ({ userState }) => {
           className={` ${
             loading
               ? "bg-renatal-blue/70 py-3 px-[4.5rem] cursor-not-allowed"
-              : "bg-renatal-blue py-2  px-16"
+              : "bg-renatal-blue py-3  px-16"
           } text-white  lato-regular rounded-md flex justify-center items-center `}
         >
           {loading ? (
