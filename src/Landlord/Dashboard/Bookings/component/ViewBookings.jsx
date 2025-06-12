@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ListLayout from "../../Property/PropertyListingDetails/component/listLayout";
 import BookingListLayout from "./bookingListLayout";
@@ -7,101 +7,38 @@ import ViewBookingDetails from "./ViewBookingDetails";
 import { AppRoutes } from "../../../../utils/route";
 import { IoMdCall } from "react-icons/io";
 import { CiMail } from "react-icons/ci";
-
+import { useAuth } from "../../../../context/authContext";
+import { getSingleAgreeement } from "../../../../services/queries";
+import Spinner from "../../../../component/Spinner";
 const ViewBookings = () => {
   const { bookingid } = useParams();
-  const listingData = [
-    {
-      id: 1,
-      name: "Orchid  Oslo",
-      owner: " precious tami",
-      location: "Banana Island, Lagos, NGA",
-      agreementID: "AGR-2025-001",
-      locationImage: [
-        "/house1.jpg",
-        "/house2.jpg",
-        "/house3.jpg",
-        "/house4.jpg",
-        "/house5.jpg",
-        "/house6.jpg",
-        "/house4.jpg",
-        "/house5.jpg",
-        "/house6.jpg",
-      ],
-      price: 1200000,
-      beds: 3,
-      bath: 3,
-      sqft: 1425,
-      description: `This Residential Lease Agreement ("Agreement") is made between Richard Williams ("Property Owner") and Precious Owo ("Tenant") for the property located at 123 Coastal Drive, Malibu, Banana Island, Lagos ("Property"). The lease term is for 5 years, beginning on May 1, 2025, and ending on November 1, 2030. The monthly rent is ₦1,200,000, due on the 1st day of each month. A security deposit of ₦200,000 has been collected and will be returned within 30 days of lease termination, less any deductions for damages beyond normal wear and tear. Tenant agrees to use the Property as a private residence only and to comply with all applicable laws, regulations, and HOA rules. No subletting is permitted without prior written consent from the Landlord.
+  const [listingData, setListingData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-This Residential Lease Agreement ("Agreement") is made between Richard Williams ("Property Owner") and Precious Owo ("Tenant") for the property located at 123 Coastal Drive, Malibu, Banana Island, Lagos ("Property"). The lease term is for 5 years, beginning on May 1, 2025, and ending on November 1, 2030.
-The monthly rent is ₦1,200,000, due on the 1st day of each month. A security deposit of ₦200,000 has been collected and will be returned within 30 days of lease termination, less any deductions for damages beyond normal wear and tear.
-Tenant agrees to use the Property as a private residence only and to comply with all applicable laws, regulations, and HOA rules. No subletting is permitted without prior written consent from the Landlord.`,
-    },
-    {
-      id: 2,
-      name: "Old jersey farm road 14 0367 Oslo",
-      owner: " precious tami",
-      location: "Banana Island, Lagos, NGA",
-      agreementID: "AGR-2025-001",
-      locationImage: [
-        "/loginPreview.png",
-        "/loginPreview.png",
-        "/loginPreview.png",
-        "/loginPreview.png",
-      ],
-      price: 1202000,
-      beds: 3,
-      bath: 3,
-      sqft: 1425,
-            description: `This Residential Lease Agreement ("Agreement") is made between Richard Williams ("Property Owner") and Precious Owo ("Tenant") for the property located at 123 Coastal Drive, Malibu, Banana Island, Lagos ("Property"). The lease term is for 5 years, beginning on May 1, 2025, and ending on November 1, 2030. The monthly rent is ₦1,200,000, due on the 1st day of each month. A security deposit of ₦200,000 has been collected and will be returned within 30 days of lease termination, less any deductions for damages beyond normal wear and tear. Tenant agrees to use the Property as a private residence only and to comply with all applicable laws, regulations, and HOA rules. No subletting is permitted without prior written consent from the Landlord.
+  const { token } = useAuth();
 
-This Residential Lease Agreement ("Agreement") is made between Richard Williams ("Property Owner") and Precious Owo ("Tenant") for the property located at 123 Coastal Drive, Malibu, Banana Island, Lagos ("Property"). The lease term is for 5 years, beginning on May 1, 2025, and ending on November 1, 2030.
-The monthly rent is ₦1,200,000, due on the 1st day of each month. A security deposit of ₦200,000 has been collected and will be returned within 30 days of lease termination, less any deductions for damages beyond normal wear and tear.
-Tenant agrees to use the Property as a private residence only and to comply with all applicable laws, regulations, and HOA rules. No subletting is permitted without prior written consent from the Landlord.`
-    },
-    {
-      id: 3,
-      name: "Old jersey farm road 14 0367 Oslo",
-      owner: " precious tami",
-      location: "Banana Island, Lagos, NGA",
-      agreementID: "AGR-2025-001",
+  const getMyAgreement = async () => {
+    setLoading(true);
+    try {
+      const data = await getSingleAgreeement({ token, id: bookingid });
+      setListingData(data?.data);
+    } catch (err) {
+      console.error("Error fetching listing:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      locationImage: [
-        "/loginPreview.png",
-        "/loginPreview.png",
-        "/loginPreview.png",
-        "/loginPreview.png",
-      ],
+  useEffect(() => {
+    if (token && bookingid) {
+      getMyAgreement();
+    }
+  }, [token, bookingid]);
 
-      price: 2000,
-      beds: 3,
-      bath: 3,
-      sqft: 1425,
-    },
-    {
-      id: 4,
-      name: "Old jersey farm road 14 0367 Oslo",
-      owner: " precious tami",
-      location: "Banana Island, Lagos, NGA",
-      agreementID: "AGR-2025-001",
-      locationImage: [
-        "/loginPreview.png",
-        "/loginPreview.png",
-        "/loginPreview.png",
-        "/loginPreview.png",
-      ],
-      price: 2000,
-      beds: 3,
-      bath: 3,
-      sqft: 1425,
-    },
-  ];
-  const selectedProperty = listingData.find(
-    (item) => item.id === Number(bookingid)
-  );
-  if (!selectedProperty) {
-    return <div className="p-4 text-red-500">Property not found</div>;
+  const myAgreement = listingData?.agreement;
+  const myListing = listingData?.listing;
+  if (!loading) {
+    return <Spinner />;
   }
   return (
     <div className="lato-regular">
@@ -118,8 +55,7 @@ Tenant agrees to use the Property as a private residence only and to comply with
       </section>
       <div className="flex items-center justify-between py-5">
         <h1 className="text-2xl text-renatal-blue font-semibold">
-          {" "}
-          {selectedProperty.agreementID}
+          AGR-{myAgreement?.id}
         </h1>
         <button className="bg-primaryCol text-white flex items-center font-semibold rounded-md w-fit  px-7 py-2 gap-x-3 cursor-pointer">
           <img src="/arrowdown.png" alt="arrowdown.png" />
@@ -132,11 +68,11 @@ Tenant agrees to use the Property as a private residence only and to comply with
         <p className="text-rental-deep ">Payment Interval</p>
       </div>
 
-      <BookingListLayout selectedProperty={selectedProperty} />
+      {myListing && <BookingListLayout selectedProperty={myListing} />}
 
       <section className="flex justify-between items-start">
         <article className="basis-[74%] ">
-          <ViewBookingDetails selectedProperty={selectedProperty} />
+          {myListing && <ViewBookingDetails selectedProperty={myListing} />}
         </article>
         <article className="bg-rental-deep/10  p-4 basis-[24%] mt-5 rounded-2xl">
           <h1 className="font-bold text-darkText text-lg">Tenant</h1>

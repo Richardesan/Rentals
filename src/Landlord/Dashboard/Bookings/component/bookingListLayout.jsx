@@ -8,12 +8,12 @@ const BookingListLayout = ({ selectedProperty }) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
-  const images = selectedProperty.locationImage;
+  const images = selectedProperty?.images;
   const openViewerAt = (index) => {
     setStartIndex(index);
     setIsViewerOpen(true);
   };
-  const totalImages = images.length;
+  const totalImages = images?.length;
 
   const paginate = (newDirection) => {
     setDirection(newDirection);
@@ -53,7 +53,7 @@ const BookingListLayout = ({ selectedProperty }) => {
   const goRight = () => {
     if (
       startIndex !== null &&
-      startIndex < selectedProperty.locationImage.length - 1
+      startIndex < selectedProperty.images.length - 1
     ) {
       setStartIndex((prev) => prev + 1);
     }
@@ -66,7 +66,7 @@ const BookingListLayout = ({ selectedProperty }) => {
           <AnimatePresence initial={false} custom={direction}>
             <motion.img
               key={currentIndex}
-              src={images[currentIndex]}
+              src={images[currentIndex]?.fileUrl}
               alt={`Image ${currentIndex + 1}`}
               custom={direction}
               variants={variants}
@@ -148,7 +148,7 @@ const BookingListLayout = ({ selectedProperty }) => {
             ‹
           </button>
           <img
-            src={selectedProperty.locationImage[startIndex]}
+            src={selectedProperty.images[startIndex]?.fileUrl}
             alt={`Image ${startIndex + 1}`}
             className="max-w-[90%] max-h-[90%] object-contain rounded shadow"
           />

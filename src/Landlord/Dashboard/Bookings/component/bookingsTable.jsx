@@ -1,63 +1,43 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const BookingsTable = () => {
+const header = [
+  { id: 1, key: "property", label: "Property" },
+  { id: 6, key: "agreementID", label: "Agreement ID" },
+  { id: 2, key: "tenant", label: "Tenant" },
+  { id: 3, key: "amount", label: "Amount" },
+  { id: 4, key: "period", label: "Period" },
+  { id: 5, key: "status", label: "Status" },
+];
+
+const BookingsTable = ({ getagreementData }) => {
   const navigate = useNavigate();
-
-  const header = [
-    { id: 1, key: "property", label: "Property" },
-    { id: 6, key: "agreementID", label: "Agreement ID" },
-    { id: 2, key: "tenantemail", label: "Tenant email" },
-    { id: 3, key: "amount", label: "Amount" },
-    { id: 4, key: "period", label: "Period" },
-    { id: 5, key: "status", label: "Status" },
-  ];
-
-  const data = [
-    {
-      id: 1,
-      property: "4539 Concourse Rd, Darlington, MD",
-      tenantemail: "esanrichard2@gmail.com",
-      agreementID: "AGR-2025-001",
-      status: "signed",
-      period: "1/1/2024 - 12/31/2024",
-      amount: 50000,
-    },
-    {
-      id: 2,
-      property: "4539 Concourse Rd, Darlington, MD",
-      tenantemail: "esanrichard2@gmail.com",
-      agreementID: "AGR-2025-001",
-      status: "pending",
-      period: "1/1/2024 - 12/31/2024",
-      amount: 50000,
-    },
-    {
-      id: 3,
-      property: "4539 Concourse Rd, Darlington, MD",
-      tenantemail: "esanrichard2@gmail.com",
-      agreementID: "AGR-2025-001",
-      status: "cancelled",
-      period: "1/1/2024 - 12/31/2024",
-      amount: 50000,
-    },
-  ];
 
   const getTransactionTypeClass = (type) => {
     switch (type.toLowerCase()) {
       case "cancelled":
-        return "bg-[#FF1414] w-fit";
+        return "bg-[#FF1414]";
       case "signed":
-        return "bg-[#388E3C] w-fit";
+        return "bg-[#388E3C]";
       case "pending":
-        return "bg-[#FB8C00BB] w-fit";
+        return "bg-[#FB8C00BB]";
       default:
-        return "text-gray-600";
+        return "bg-gray-400";
     }
   };
 
   const addCommas = (number) =>
     String(number).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  function formatDateRange(start, end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    const format = (date) =>
+      `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+
+    return `${format(startDate)} - ${format(endDate)}`;
+  }
 
   return (
     <section>
@@ -80,32 +60,33 @@ const BookingsTable = () => {
         </thead>
 
         <tbody className="text-sm">
-          {data.map((row) => (
-            <tr
-              key={row.id}
-              className="even:bg-[#F7F8FA] cursor-pointer hover:bg-gray-100 transition opacity-70 hover:opacity-100"
-              onClick={() => navigate(`/landlord/dashboard/viewagreement/${row.id}`)}
-            >
-              {header.map((col) => (
-                <td key={col.id} className="py-5 px-4">
-                  <div
-                    className={`flex rounded-3xl items-center gap-x-2 ${
-                      col.key === "status"
-                        ? `${getTransactionTypeClass(row[col.key])} px-5 py-1 text-white capitalize`
-                        : "text-black"
-                    }`}
-                  >
-                    {col.key === "status" && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
-                    )}
-                    <span>
-                      {col.key === "amount"
-                        ? `₦${addCommas(row[col.key])}`
-                        : row[col.key]}
-                    </span>
-                  </div>
-                </td>
-              ))}
+          {getagreementData?.map((data, index) => (
+            <tr  onClick={() => navigate(`/landlord/dashboard/viewagreement/${data.agreement.id}`)} key={index} className="border-t py-4 align-middle cursor-pointer even:bg-[#F7F8FA] opacity-70 hover:opacity-100">
+              <td className="px-4 py-6">
+                {data.listing.address.street}{" "}
+                {data.listing.address.city}, {data.listing.address.state},{" "}
+                {data.listing.address.country}
+              </td>
+              <td className="px-4"   >{data.agreement.id}</td>
+              <td className="px-4">
+                {data.tenant.firstname} {data.tenant.lastname}
+              </td>
+              <td className="px-4">{addCommas(data.agreement.rentAmount)}</td>
+              <td className="px-4">
+                {formatDateRange(
+                  data.agreement.startDate,
+                  data.agreement.endDate
+                )}
+              </td>
+              <td className="px-4">
+                <span
+                  className={`inline-block text-white rounded-full px-3 py-1 text-xs ${getTransactionTypeClass(
+                    data.agreement.agreementStatus
+                  )}`}
+                >
+                  {data.agreement.agreementStatus}
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>

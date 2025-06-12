@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Card = ({open, balance}) => {
+const Card = ({open, balance, deposit}) => {
   function addCommas(number) {
   if (!number || isNaN(Number(number))) return number;
 
@@ -23,7 +23,7 @@ const Card = ({open, balance}) => {
               withdraw
             </p>
           </div>
-          <p className="bg-renatal-blue text-white py-3 px-12 rounded-lg cursor-pointer">
+          <p className="bg-renatal-blue text-white py-3 px-12 rounded-lg cursor-pointer" onClick={deposit}>
             Deposit
           </p>
         </div>

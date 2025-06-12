@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import BankForm from "./BankForm";
 import { useAuth } from "../../../../context/authContext";
-import { walletWithdrawal } from "../../../../services/queries";
-const Modal = ({ onClose, balance }) => {
+import { walletDeposit } from "../../../../services/queries";
+import ButtonSpinner from "../../../../component/ButtonSpinner";
+import { toast } from "react-toastify";
+const DepositModal = ({ onClose, balance }) => {
   const { token } = useAuth();
   const [inputValue, setInputValue] = useState("");
   const spanRef = useRef(null);
-  const [accountNumber, setAccountNumber] = useState("");
-  const [selectedBank, setSelectedBank] = useState("");
-  const [accountName, setAccountName] = useState("");
-const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [inputWidth, setInputWidth] = useState(50); // initial width
 
   const removeCommas = (number) => {
@@ -51,28 +49,42 @@ const [loading, setLoading] = useState(false)
 
   const isWithdrawDisabled =
     !inputValue.trim() || // input is empty
-    isNaN(getRawValue(inputValue)) || // not a number
-    getRawValue(inputValue) > Number(balance) || // more than balance
-    !accountName.trim() ||
-    accountName === "Error fetching name" || // fetch error
-    !selectedBank.trim() ||
-    accountNumber.trim().length !== 10;
+    isNaN(getRawValue(inputValue));
 
-  const handleWithdraw = async () => {
-    setLoading(true)
+  const handleDeposit = async () => {
     const credentials = {
-      accountNumber,
-      bankCode: selectedBank,
-      name: accountName,
       amount: getRawValue(inputValue).toString(),
     };
+    setLoading(true);
     try {
-      const data = await walletWithdrawal({ token, credentials });
-      console.log(data)
-    } catch(err) {
-      console.log(err)
+      const data = await walletDeposit({ token, credentials });
+      toast.success("Deposit successful!", {
+        style: {
+          backgroundColor: "#0C2D5B",
+          color: "#fff",
+          fontSize: "0.8rem",
+          padding: "8px 12px",
+        },
+      });
+      // onClose()
+      const redirect = data?.data?.depositURL;
+      console.log(redirect);
+      if (redirect) {
+        window.location.href = redirect;
+      }
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.response?.data?.message, {
+        style: {
+          backgroundColor: "#C8170D",
+          color: "#fff",
+          fontSize: "0.8rem",
+          padding: "8px 12px",
+        },
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -92,7 +104,7 @@ const [loading, setLoading] = useState(false)
           ×
         </button>
         <div className="text-renatal-blue flex flex-col justify-center items-center">
-          <p className="mb-5">Enter Amount to Withdraw</p>
+          <p className="mb-9">Enter Amount to Deposit</p>
           <div className="relative flex items-center text-4xl bg-slate-400">
             <span className="absolute -left-0.5">₦</span>
             <input
@@ -115,20 +127,22 @@ const [loading, setLoading] = useState(false)
           <p className="mt-3">{addCommas(balance)}</p>
           <p className="text-renatal-blue/70">Available Balance</p>
         </div>
-        <BankForm
-          accountNumber={accountNumber}
-          setAccountNumber={setAccountNumber}
-          selectedBank={selectedBank}
-          setSelectedBank={setSelectedBank}
-          setAccountName={setAccountName}
-          accountName={accountName}
-          handleWithdraw={handleWithdraw}
-          isWithdrawDisabled={isWithdrawDisabled}
-          loading={loading}
-        />
+        <div className="flex justify-center mt-9">
+          <button
+            onClick={handleDeposit}
+            className={`bg-renatal-blue py-3 flex justify-center  rounded-md w-40   items-center text-white mx-auto  ${
+              isWithdrawDisabled
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-renatal-blue"
+            }`}
+            disabled={isWithdrawDisabled || loading}
+          >
+            {loading ? <ButtonSpinner /> : "Deposit"}
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Modal;
+export default DepositModal;

@@ -1,16 +1,27 @@
 import React from "react";
+import ContractTemplate from "./ContractTemplate";
 
 const ViewBookingDetails = ({ selectedProperty }) => {
+    function addCommas(number) {
+  if (!number || isNaN(Number(number))) return number;
+
+  const [intPart, decimalPart] = String(number).split(".");
+
+  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  return decimalPart ? `${formattedInt}.${decimalPart}` : formattedInt;
+}
+
   return (
     <div>
       <article className="bg-rental-deep/10 py-8 px-5 mt-5 rounded-lg">
-        <h1 className="text-4xl font-bold ">{selectedProperty.name}</h1>
+        <h1 className="text-4xl font-bold ">{selectedProperty.title}</h1>
 
         <div className="flex justify-between items-start mt-2 py-3">
           <div>
             <p className="text-xl mb-2 font-semibold">
               Apartment by{" "}
-              <span className="capitalize">{selectedProperty.owner}</span>
+              <span className="capitalize">{selectedProperty.landlordName}</span>
             </p>
 
             <div className="flex gap-x-0.5 items-center">
@@ -21,7 +32,10 @@ const ViewBookingDetails = ({ selectedProperty }) => {
               />
 
               <p className="text-sm text-black/50">
-                {selectedProperty.location}
+                {selectedProperty.address.street}, 
+               <span className="pl-1"></span> {selectedProperty.address.city}, 
+             <span className="pl-1"></span>   {selectedProperty.address.state}, 
+               <span className="pl-1"></span> {selectedProperty.address.country}, 
               </p>
             </div>
             <article className="flex justify-between items-center text-sm mt-5 ">
@@ -32,8 +46,8 @@ const ViewBookingDetails = ({ selectedProperty }) => {
                   className="object-cover w-5"
                 />
                 <p>
-                  {selectedProperty.beds} Bed
-                  {selectedProperty.beds > 1 ? "s" : ""}
+                  {selectedProperty.numberOfBedrooms} Bed
+                  {selectedProperty.numberOfBedrooms > 1 ? "s" : ""}
                 </p>
               </div>
               <div className="flex gap-x-0.5 items-center ">
@@ -43,8 +57,8 @@ const ViewBookingDetails = ({ selectedProperty }) => {
                   className="object-cover w-5"
                 />
                 <p>
-                  {selectedProperty.bath} bath
-                  {selectedProperty.bath > 1 ? "s" : ""}
+                  {selectedProperty.numberOfBathrooms} bath
+                  {selectedProperty.numberOfBathrooms > 1 ? "s" : ""}
                 </p>
               </div>
               <div className="flex gap-x-0.5 items-center ">
@@ -53,12 +67,12 @@ const ViewBookingDetails = ({ selectedProperty }) => {
                   alt="blackarchitecture"
                   className="object-cover w-5"
                 />
-                <p>{selectedProperty.sqft} ft²</p>
+                <p>{selectedProperty.numberOfKitchen} ft²</p>
               </div>
             </article>
           </div>
           <p className="text-2xl text-renatal-blue font-semibold">
-            ₦{selectedProperty.price.toLocaleString()}
+            ₦{addCommas(selectedProperty.price.toLocaleString())}
           </p>
         </div>
       </article>
@@ -69,6 +83,20 @@ const ViewBookingDetails = ({ selectedProperty }) => {
         <p className="mt-2 text-rental-dark font-semibold">General Terms</p>
         <p className="text-base text-rental-dark/60 font-semiibold w-11/12 pl-2 py-2">
           {selectedProperty.description}
+          <ContractTemplate
+  landlordFullName="John Doe"
+  landlordFullAddress="123 Landlord Street, Abuja"
+  agentName="Jane Agent"
+  agentFullAddress="456 Agent Lane, Lagos"
+  propertyAddress="789 Property Ave, Enugu"
+  tenantFullName="Richard Tenant"
+  tenantAddress="101 Tenant Rd, Port Harcourt"
+  startDate="June 1, 2025"
+  endDate="May 31, 2026"
+  annualRent="500000"
+  securityDeposit="50000"
+  agentFee="50000"
+/>
         </p>
      
       <section className="w-full  flex items-center mt-9">

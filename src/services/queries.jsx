@@ -51,6 +51,12 @@ export const getWalletBalance = async ({ token }) => {
 
 };
 
+export const getAgreement = async ({ token }) => {
+    const { data } = await authenticatedAPI(token).get("agreement");
+    return data;
+
+};
+
 export const getBankCodes = async ({ token }) => {
     const { data } = await authenticatedAPI(token).get("wallet/banks");
     return data;
@@ -68,3 +74,19 @@ export const resolveAccountNumber = async ({ token, accountNumber, bankCode }) =
 
   return data;
 };
+
+export const walletWithdrawal = async ({ token, credentials }) => {
+  const { data } = await authenticatedAPI(token).post("wallet/withdraw", credentials);
+  return data;
+};
+
+export const walletDeposit = async ({ token, credentials }) => {
+  const { data } = await authenticatedAPI(token).post("wallet/deposit", credentials);
+  return data;
+};
+
+export const getSingleAgreeement = async ({ token, id }) => {
+  const { data } = await authenticatedAPI(token).get(`agreement/${id}`)
+  return data;
+
+}

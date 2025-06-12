@@ -4,12 +4,13 @@ import Modal from "./component/Modal";
 import TransactionTable from "./component/TransactionTable";
 import { getWalletBalance } from "../../../services/queries";
 import { toast } from "react-toastify";
-
 import { useAuth } from "../../../context/authContext";
 import CardSkeleton from "./component/cardSkeleton";
+import DepositModal from "./component/depositModal";
 const Wallet = () => {
   const { token } = useAuth();
   const [openModal, setOpenModal] = useState(false);
+  const [openDeposit, setOpenDeposit] = useState(false);
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState("");
@@ -42,14 +43,15 @@ const Wallet = () => {
   }
   return (
     <section>
-      <Card open={() => setOpenModal(true)} balance={balance} />
-      <div className="bg-slate-400">
-        {openModal ? (
-          <Modal openModal={openModal} onClose={() => setOpenModal(false)} balance={balance}/>
-        ) : (
-          ""
+      <Card open={() => setOpenModal(true)} deposit={() => setOpenDeposit(true)} balance={balance} />
+      
+        {openModal && (
+          <Modal  onClose={() => setOpenModal(false)} balance={10000}/>
         )}
-      </div>
+      {openDeposit && (
+          <DepositModal  onClose={() => setOpenDeposit(false)} balance={10000}/>
+        )}
+      
       <div className="mt-14">
         <TransactionTable />
       </div>
