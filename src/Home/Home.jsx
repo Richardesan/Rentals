@@ -12,7 +12,11 @@ const Home = () => {
      <Platform />
      <Works />
      <Discover />
-     <Footer />
+ <Footer /> 
+
+     {/* 
+
+    */}
     </section>
   );
 };

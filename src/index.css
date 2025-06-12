@@ -7,6 +7,17 @@
   padding: 0px;
   box-sizing: border-box;
 }
+/* Hide scrollbars in all browsers */
+* {
+  scrollbar-width: none;         /* Firefox */
+  -ms-overflow-style: none;      /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbars in WebKit browsers */
+*::-webkit-scrollbar {
+  display: none;                 /* Chrome, Safari, Opera */
+}
+
 .lato-thin {
   font-family: "Lato", sans-serif;
   font-weight: 100;
@@ -21,8 +32,7 @@
 
 .lato-regular {
   font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+
 }
 
 .lato-bold {

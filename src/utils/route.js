@@ -1,7 +1,27 @@
 export const AppRoutes = {
-    home: "/",
-    login: "/login",
-    signup: "/signup/:userType",
-    forgotPassowrd: "/forgotPassowrd"
-    
+  home: "/",
+  login: "/login",
+  forgot: "/forgot",
+  signup: "/signup/:userType",
+  forgotPassowrd: "/forgotPassowrd",
+  dashboard: "/tenant/dashboard",
+  wallet: "/tenant/dashboard/wallet",
+  property: "/tenant/dashboard/property",
+  bookings: "/tenant/dashboard/bookings",
+  chats: "/tenant/dashboard/chats",
+  profile: "/tenant/dashboard/profile",
+  viewBookings: "/tenant/dashboard/viewagreement/:tenantbookid",
+  savingsplan: "/tenant/dashboard/wallet/savingsplan",
+  PropertyListingDetails: "/tenant/dashboard/PropertyListingDetails/:id",
+  landlordDashboard: "/landlord/dashboard",
+  landlordWallet: "/landlord/dashboard/wallet",
+  landlordProperty: "/landlord/dashboard/property",
+  landlordBookings: "/landlord/dashboard/bookings",
+  landlordChats: "/landlord/dashboard/chats",
+  landlordSettings: "/landlord/dashboard/settings",
+  landlordAddProperty: "/landlord/dashboard/property/addproperty",
+  landlordCreateBookings: "/landlord/dashboard/bookings/createBookings",
+  landlordlistingDetails: "/landlord/dashboard/listingdetails/:id",
+  landlordViewBookings: "/landlord/dashboard/viewagreement/:bookingid",
+  landlordProfile: "/landlord/dashboard/profile"
 };

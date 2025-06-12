@@ -10,9 +10,11 @@ export default {
         "primary-light" : "#F7F8FAB2",
         "renatal-blue" : "#0C2D5B",
         "rental-yellow" : "#D4AF37E5",
+        "rental-green" : "#1BD21BA3",
         
         "rental-dark" : "#1C1C1E",
-         "lightText": "#757575",
+         "lightText": "#D9D9D9A0",
+         "rental-deep": "#A0A0A0A0",
                 "borderCol": "#E2E2E2",
                 "darkText": "#1A1A1A",
                 "primaryCol": "#0C2D5B",
@@ -21,6 +23,12 @@ export default {
       },
       animation: {
         'spin-slow': 'spin 5s linear infinite',
+      },
+      
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(100.47deg, rgba(146, 147, 148, 0.21) -29.11%, rgba(247, 248, 250, 0.3) 48.41%)',
+         'glossy-gradient': 'linear-gradient(180deg, rgba(247, 248, 250, 0.7) 34.14%, rgba(146, 147, 148, 0.49) 78.85%)',
+        'gold-gradient': 'linear-gradient(173.3deg, #0C2D5B 10.23%, rgba(212, 175, 55, 0.7) 105.49%, rgba(212, 175, 55, 0.7) 138.1%)',
       },
        boxShadow: {
                 "custom-combined": `
@@ -32,7 +40,9 @@ export default {
         `,
                 "custom-light": "0px 28px 28px 0px #F1F5F9",
                 "custom-shadow": "0px 6px 6px 0px #F1F5F9",
-                "custom-shadow-hover": "0px 10px 10px 0px #F1F5F9"
+                "custom-shadow-hover": "0px 10px 10px 0px #F1F5F9",
+                        "subtle": '0 0 4px 0 #00000040',
+
             },
     },
   },

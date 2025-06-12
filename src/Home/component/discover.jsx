@@ -69,18 +69,18 @@ const Discover = () => {
     "cursor-pointer active:scale-95 hover:scale-105 transistion-all duration-100";
 
   return (
-    <section className="px-24 py-8 bg-primary-light">
-      <article className="flex  items-center justify-between">
-        <p className="text-6xl w-[20vw] lato-regular">
+    <section className="px-32  max-md:px-[4%] py-8 bg-primary-light">
+      <article className="flex  items-center justify-between max-lg:flex-col">
+        <p className="text-6xl max-w-[23rem] lato-regular max-lg:text-center max-sm:text-3xl">
           Discover your <span className="lato-regular-italic">Best match</span>
         </p>
-        <p className="text-lg w-[25vw]">
+        <p className="text-lg max-w-[27rem] max-lg:text-center max-lg:mt-3 max-sm:text-base">
           We connect you with premium properties that match your unique
           lifestyle, preferences, and needs, ensuring a seamless experience in
           exploring our handpicked selection of outstanding rental properties.
         </p>
       </article>
-      <article className="mt-12 flex flex-wrap justify-center gap-x-12 maz">
+      <article className="mt-12 flex flex-wrap justify-center gap-x-12 ">
         {discoverItems.map((data, index) => {
           return (
             <div
@@ -90,7 +90,7 @@ const Discover = () => {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
               }}
-              className=" mb-6 w-[26rem] h-[30rem] rounded-3xl relative flex items-end overflow-hidden"
+              className=" mb-6 w-[26rem] max-xl:w-[23rem] h-[30rem] rounded-3xl relative flex items-end overflow-hidden"
             >
                 <img src="/discoverfavorite.png" className="absolute top-6 right-6 cursor-pointer" />
               <div className="   pt-8 px-8 pb-4 w-full bg-white/10 backdrop-blur-sm text-white">

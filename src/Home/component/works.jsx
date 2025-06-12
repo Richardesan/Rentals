@@ -50,7 +50,7 @@ const Works = () => {
 
   return (
     <section
-      className="h-screen text-white relative px-10 pt-14 flex items-center  "
+      className="h-screen px-32 max-md:h-[unset] max-xl:py-5  max-lg:px-[4%] text-white relative   flex items-center  "
       style={{
         backgroundImage: 'url("/works.jpg")',
         backgroundSize: "cover",
@@ -58,32 +58,32 @@ const Works = () => {
         backgroundPosition: "center",
       }}
     >
-      <div className="bg-black absolute top-0 left-0 w-full h-full opacity-40 "></div>
-      <section className=" flex justify-between items-center w-full">
-        <article className=" text-white w-[15vw] ml-20">
-          <p className="text-6xl lato-regular leading-tight">
+      <div className="bg-black absolute top-0 left-0 w-full h-full opacity-60 "></div>
+      <section className=" flex justify-between items-center w-full max-xl:flex-col max-xl:gap-y-5">
+        <article className=" text-white z-10 xl:max-w-72 w-full ">
+          <p className="text-6xl lato-regular leading-tight max-sm:text-3xl max-sm:text-center">
             How it <span className="lato-regular-italic">works</span>
           </p>
-          <p>
-            Our streamlined process makes renting simple for everyone involved
+          <p className="max-sm:text-center"> 
+           Our streamlined process makes renting simple for everyone involved
           </p>
         </article>
-        <article className="bg-white/10 backdrop-blur-sm border text-white border-white/20 px-14 py-5 flex gap-x-28 rounded-3xl items-center">
+        <article className="bg-white/10 backdrop-blur-sm border text-white border-white/20 px-14 py-5 flex gap-x-28 max-2xl:gap-x-10 max-md:flex-col max-sm:px-4 max-md:items-start max-md:w-full rounded-3xl items-center">
           <section>
             <article className="flex gap-x-1 pl-4">
               <img src="/yellow-brick.png" />
               <p className="text-xl lato-bold">For Tenants</p>
             </article>
-            <div className="space-y-5 mt-4">
+            <div className="space-y-5 mt-4 max-sm:space-y-3">
               {tenantWork.map((data, index) => {
                 return (
                   <div className="flex items-center gap-x-3" key={index}>
                     <img src={data.img} />
                     <div>
-                      <p className="capitalize text-lg lato-regular">
+                      <p className="capitalize text-xl lato-regular">
                         {data.title}
                       </p>
-                      <p className="text-primary-light text-xs lato-light mt-3 w-56 break-words">
+                      <p className="text-primary-light text-sm lato-light mt-3 w-full md:max-w-60  break-words">
                         {data.text}
                       </p>
                     </div>
@@ -97,24 +97,24 @@ const Works = () => {
               </button>
             </div>
           </section>
-          <div>
+          <div className="max-md:hidden">
             <img src="/workline.png" />
           </div>
           <section>
-            <article className="flex gap-x-1 pl-4">
+            <article className="flex gap-x-1 pl-4 max-md:mt-5">
               <img src="/yellow-brick.png" />
-              <p className="text-xl lato-bold">For Landlords</p>
+              <p className="text-xl lato-bold ">For Landlords</p>
             </article>
-            <div className="space-y-5 mt-4">
+            <div className="space-y-5 mt-4 max-sm:space-y-3">
               {landlordWork.map((data, index) => {
                 return (
                   <div className="flex items-center gap-x-3" key={index}>
                     <img src={data.img} />
                     <div>
-                      <p className="capitalize text-lg lato-regular">
+                      <p className="capitalize text-xl lato-regular">
                         {data.title}
                       </p>
-                      <p className="text-primary-light text-xs lato-light mt-3 w-56 break-words">
+                      <p className="text-primary-light text-sm lato-light mt-3 w-full md:max-w-60 break-words">
                         {data.text}
                       </p>
                     </div>
