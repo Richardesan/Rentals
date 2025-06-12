@@ -37,7 +37,7 @@ const ViewBookings = () => {
 
   const myAgreement = listingData?.agreement;
   const myListing = listingData?.listing;
-  if (!loading) {
+  if (loading) {
     return <Spinner />;
   }
   return (

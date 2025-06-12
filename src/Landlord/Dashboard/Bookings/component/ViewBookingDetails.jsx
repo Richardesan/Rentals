@@ -11,7 +11,7 @@ const ViewBookingDetails = ({ selectedProperty }) => {
 
   return decimalPart ? `${formattedInt}.${decimalPart}` : formattedInt;
 }
-
+const alladdress =selectedProperty.address.street + selectedProperty.address.city + selectedProperty.address.state + selectedProperty.address.country
   return (
     <div>
       <article className="bg-rental-deep/10 py-8 px-5 mt-5 rounded-lg">
@@ -82,13 +82,12 @@ const ViewBookingDetails = ({ selectedProperty }) => {
         </h1>
         <p className="mt-2 text-rental-dark font-semibold">General Terms</p>
         <p className="text-base text-rental-dark/60 font-semiibold w-11/12 pl-2 py-2">
-          {selectedProperty.description}
           <ContractTemplate
-  landlordFullName="John Doe"
-  landlordFullAddress="123 Landlord Street, Abuja"
-  agentName="Jane Agent"
+  landlordFullName={selectedProperty.landlordName}
+  landlordFullAddress={alladdress}
+  agentName=" Agent"
   agentFullAddress="456 Agent Lane, Lagos"
-  propertyAddress="789 Property Ave, Enugu"
+  propertyAddress={alladdress}
   tenantFullName="Richard Tenant"
   tenantAddress="101 Tenant Rd, Port Harcourt"
   startDate="June 1, 2025"

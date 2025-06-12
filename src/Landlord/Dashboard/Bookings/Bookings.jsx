@@ -4,11 +4,13 @@ import Subheading from './component/subheading'
 import { getAgreement } from '../../../services/queries'
 import { useAuth } from '../../../context/authContext'
 import { toast } from 'react-toastify'
+import Spinner from '../../../component/Spinner'
 const Bookings = () => {
   const {token} =useAuth()
-  const [reload, setReload] = useState(false)
   const [getagreementData, setGetAgreementData] = useState([])
+  const [loading, setLoading] = useState(false)
   const getBookings = async () => {
+    setLoading(true)
     try {
       const data = await getAgreement({ token });
       setGetAgreementData(data?.data)
@@ -22,14 +24,21 @@ const Bookings = () => {
           padding: "8px 12px",
         },
       });
-    }  
+    }  finally {
+    setLoading(false)
+
+    }
   };
   useEffect(() => {
     if (token) {
       getBookings();
     }
-  }, [token, reload]);
-console.log(getagreementData)
+  }, [token]);
+
+  if (loading) {
+    return <Spinner />;
+  }
+  
   return (
     <div className='lato-regular'>
       <Subheading/>
