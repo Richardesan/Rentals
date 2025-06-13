@@ -26,9 +26,15 @@ const BookingsTable = ({ getagreementData }) => {
     }
   };
 
-  const addCommas = (number) =>
-    String(number).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  function addCommas(number) {
+  if (!number || isNaN(Number(number))) return number;
 
+  const [intPart, decimalPart] = String(number).split(".");
+
+  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  return decimalPart ? `${formattedInt}.${decimalPart}` : formattedInt;
+}
   function formatDateRange(start, end) {
     const startDate = new Date(start);
     const endDate = new Date(end);

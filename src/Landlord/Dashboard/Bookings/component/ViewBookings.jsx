@@ -37,6 +37,8 @@ const ViewBookings = () => {
 
   const myAgreement = listingData?.agreement;
   const myListing = listingData?.listing;
+  const myTenant = listingData?.tenant;
+  const landlordSignature = listingData?.landlord?.signature;
   if (loading) {
     return <Spinner />;
   }
@@ -68,17 +70,24 @@ const ViewBookings = () => {
         <p className="text-rental-deep ">Payment Interval</p>
       </div>
 
-      {myListing && <BookingListLayout selectedProperty={myListing} />}
+      {myListing && <BookingListLayout selectedProperty={myListing} myAgreement={myAgreement} myListing={myListing}/>}
 
       <section className="flex justify-between items-start">
         <article className="basis-[74%] ">
-          {myListing && <ViewBookingDetails selectedProperty={myListing} />}
+          {myListing && myAgreement && (
+            <ViewBookingDetails
+              selectedProperty={myListing}
+              myAgreement={myAgreement}
+              myTenant={myTenant}
+              landlordSignature={landlordSignature}
+            />
+          )}
         </article>
         <article className="bg-rental-deep/10  p-4 basis-[24%] mt-5 rounded-2xl">
           <h1 className="font-bold text-darkText text-lg">Tenant</h1>
           <div className="max-w-sm h-52 overflow-hidden rounded-2xl my-5">
             <img
-              src="/house1.jpg"
+              src={myTenant.profilePicture}
               alt="house1.jpg"
               className="w-full h-full object-cover"
             />
@@ -86,7 +95,7 @@ const ViewBookings = () => {
           <section className="space-y-3">
             <div>
               <p className="text-rental-dark font-medium">Name</p>
-              <p className="text-rental-dark/70">Precious Owo</p>
+              <p className="text-rental-dark/70">{myTenant.firstname} {myTenant.lastname}</p>
             </div>
             <div>
               <p className="mb-1">Phone number</p>
@@ -99,7 +108,7 @@ const ViewBookings = () => {
               <p className="mb-1">Email</p>
               <div className="flex gap-x-2 items-center justify-start">
                 <CiMail className="text-xl text-renatal-blue mt-1" />
-                <p className="text-rental-dark/70">preciousowo@gmail.com</p>
+                <p className="text-rental-dark/70">{myTenant.email}</p>
               </div>
             </div>
           </section>

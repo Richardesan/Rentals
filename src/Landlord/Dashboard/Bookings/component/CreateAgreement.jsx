@@ -10,6 +10,7 @@ import { useAuth } from "../../../../context/authContext";
 import { getAllListing } from "../../../../services/queries";
 import ListingSkeletonGroup from "../../Property/component/ListingSkeletonGroup";
 import Spinner from "../../../../component/Spinner";
+import { toast } from "react-toastify";
 const CreateAgreement = () => {
   const [propertyData, setPropertyData] = useState("");
   const [myList, setMylist] = useState([]);
@@ -23,14 +24,14 @@ const CreateAgreement = () => {
       setMylist(data?.data?.listings);
     } catch (err) {
       console.error("Error fetching listings:", err);
-      toast.error("Failed to fetch listings", {
-        style: {
-          backgroundColor: "#C8170D",
-          color: "#fff",
-          fontSize: "0.8rem",
-          padding: "8px 12px",
-        },
-      });
+     toast.error(err?.response?.data?.message , {
+            style: {
+              backgroundColor: "#C8170D",
+              color: "#fff",
+              fontSize: "0.8rem",
+              padding: "8px 12px",
+            },
+          });
     } finally {
       setLoading(false);
     }
@@ -80,7 +81,7 @@ const CreateAgreement = () => {
         </div>
         {propertyData && (
           <div className="bg-rental-deep/20 rounded-lg p-4 mt-14  ">
-            <BookingDetails popertydataID={propertyData.landlordId} />
+            <BookingDetails popertydataID={propertyData.id} />
           </div>
         )}
       </article>

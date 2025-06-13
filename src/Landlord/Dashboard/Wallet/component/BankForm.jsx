@@ -102,7 +102,7 @@ const BankForm = ({
 )}
 </label>
         <div className={` p-[1px] rounded-md ${accountName === "Error fetching name" ? "bg-danger shadow shadow-danger" : "bg-gold-gradient" }`}>
-          <div className="py-3 px-5 border rounded-md bg-gray-100 text-sm text-rental-dark/80 min-h-10">
+          <div className="py-3 px-5 border rounded-md bg-gray-100 text-sm text-rental-dark/80 min-h-10 cursor-not-allowed">
             {loadingName ? "Fetching name..." : accountName === "Error fetching name" ?<span className="text-danger font-medium">Account not found</span>: accountName}
           </div>
         </div>

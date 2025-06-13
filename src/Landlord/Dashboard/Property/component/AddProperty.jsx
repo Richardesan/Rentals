@@ -6,8 +6,9 @@ import { AppRoutes } from "../../../../utils/route";
 import Success from "./success";
 import { addLandlordProperty } from "../../../../services/queries";
 import { useAuth } from "../../../../context/authContext";
+import axios from "axios";
 const AddProperty = () => {
-  const {token} = useAuth()
+  const { token } = useAuth();
   const formRef = useRef(null);
   const [rent, setRent] = useState("");
   const [filter, setFilter] = useState("Daily");
@@ -30,21 +31,12 @@ const AddProperty = () => {
   const [success, setSuccess] = useState(false);
   const addCommas = (number) => number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeCommas = (number) => number.replace(/,/g, "");
-const allAmenities = [
-  "Power",
-  "Water",
-  "Parking",
-  "Security",
-  "wifi",
-  
-];
+  const allAmenities = ["Power", "Water", "Parking", "Security", "wifi"];
 
-
-const amenityFlags = allAmenities.reduce((acc, amenity) => {
-  acc[amenity] = selectedAmenities.includes(amenity);
-  return acc;
-}, {});
-
+  const amenityFlags = allAmenities.reduce((acc, amenity) => {
+    acc[amenity] = selectedAmenities.includes(amenity);
+    return acc;
+  }, {});
 
   const handleFieldChange = (field, value) => {
     switch (field) {
@@ -135,7 +127,7 @@ const amenityFlags = allAmenities.reduce((acc, amenity) => {
         break;
       }
       case "zipCode": {
-        if (!/^\d*$/.test(value)) return; 
+        if (!/^\d*$/.test(value)) return;
 
         setZipCode(value);
 
@@ -152,7 +144,7 @@ const amenityFlags = allAmenities.reduce((acc, amenity) => {
       }
 
       case "myBathRooms": {
-        if (!/^\d*$/.test(value)) return; 
+        if (!/^\d*$/.test(value)) return;
 
         setMyBathRooms(value);
 
@@ -240,36 +232,36 @@ const amenityFlags = allAmenities.reduce((acc, amenity) => {
     }
 
     setpoofImages(newFiles);
-    e.target.value = ""; 
+    e.target.value = "";
   };
   const handleClearAll = () => {
     setImages([]);
   };
 
-    const handleProofClear = () => {
+  const handleProofClear = () => {
     setpoofImages([]);
   };
   const Amenitiesdata = [
-     {
-            icon: "/wifi.svg",
-            name: "wifi"
-        },
-           {
-            icon: "/Water.svg",
-            name: "Water"
-        },
-           {
-            icon: "/charger.svg",
-            name: "Power"
-        },
-           {
-            icon: "/parking.svg",
-            name: "Parking"
-        },
-         {
-            icon: "/shield.svg",
-            name: "Security"
-        },
+    {
+      icon: "/wifi.svg",
+      name: "wifi",
+    },
+    {
+      icon: "/Water.svg",
+      name: "Water",
+    },
+    {
+      icon: "/charger.svg",
+      name: "Power",
+    },
+    {
+      icon: "/parking.svg",
+      name: "Parking",
+    },
+    {
+      icon: "/shield.svg",
+      name: "Security",
+    },
   ];
   const btnStyle = `bg-renatal-blue text-white py-2.5 px-9 rounded-lg w-fit capitalize font-semibold`;
 
@@ -311,7 +303,7 @@ const amenityFlags = allAmenities.reduce((acc, amenity) => {
       newErrors.images = "Please upload at least 3 images.";
     }
     if (poofImages.length < 2) {
-      newErrors.poofImages = "Please upload at least 2 images"
+      newErrors.poofImages = "Please upload at least 2 images";
     }
 
     if (selectedAmenities.length === 0) {
@@ -324,6 +316,33 @@ const amenityFlags = allAmenities.reduce((acc, amenity) => {
 
   const handleBlur = (field) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+
+  const handleAmenityChange = (amenityName, checked) => {
+    let updated;
+
+    if (checked) {
+      updated = [...selectedAmenities, amenityName];
+    } else {
+      updated = selectedAmenities.filter((item) => item !== amenityName);
+    }
+
+    setSelectedAmenities(updated);
+
+    if (touched.selectedAmenities) {
+      if (updated.length > 0) {
+        setErrors((prev) => ({
+          ...prev,
+          selectedAmenities: undefined,
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          selectedAmenities: "Select at least 1 amenity",
+        }));
+      }
+    }
   };
 
 const handleSubmit = async () => {
@@ -364,7 +383,7 @@ const handleSubmit = async () => {
     "amenities[water]": amenityFlags.Water,
     "amenities[securitySystem]": amenityFlags.Security,
     price: rawRent,
-    paymentTerm: "monthly",
+    paymentTerm: "annually",
     visibility: "public property",
     availability,
     proofOfOwnership: poofImages,
@@ -373,79 +392,79 @@ const handleSubmit = async () => {
 
   const formData = new FormData();
 
-Object.entries(propertyPayload).forEach(([key, value]) => {
-  if (
-    Array.isArray(value) &&
-    (key === "images" || key === "proofOfOwnership")
-  ) {
-    if (value.length === 0) {
-      throw new Error(`Missing files for ${key}`);
-    }
-    value.forEach((file, idx) => {
-      if (file instanceof File) {
-        formData.append(`${key}[${idx}]`, file);
+  Object.entries(propertyPayload).forEach(([key, value]) => {
+    // 🟩 1. Files
+    if (
+      Array.isArray(value) &&
+      (key === "images" || key === "proofOfOwnership")
+    ) {
+      if (value.length === 0) {
+        throw new Error(`Missing files for ${key}`);
       }
-    });
-  } else if (typeof value === "boolean") {
-    formData.append(key, value ? "true" : "false");
-  } else if (value !== null && value !== undefined) {
-    formData.append(key, String(value));
-  }
-});
+      value.forEach((file) => {
+        if (file instanceof File) {
+          formData.append(`${key}[]`, file);
+        }
+      });
+    }
+
+    // 🟩 2. Booleans
+    else if (typeof value === "boolean") {
+      formData.append(key, String(value));
+    }
+
+    // 🟩 3. Non-empty strings/numbers
+    else if (value !== null && value !== undefined && value !== "") {
+      formData.append(key, String(value));
+    }
+
+    // 🟨 4. Skipped values (null, undefined, empty) — intentional
+  });
 
   try {
-    const data = await addLandlordProperty({ token, formData });
-console.log(data)
-    toast.success("Property listed!", {
-      style: {
-        backgroundColor: "#0C2D5B",
-        color: "#fff",
-        fontSize: "0.8rem",
-        padding: "8px 12px",
+  const response = await axios.post(
+    "https://splendid-bluejay-eminently.ngrok-free.app/api/v1/property/listing",
+    formData, // Ensure this is a valid FormData object
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "69420",
+        // Let Axios set Content-Type for FormData
       },
-    });
-    setSuccess(true);
+    }
+  );
 
-  } catch (error) {
-    console.log(error)
-    toast.error("Error listing property!", {
-      style: {
-        backgroundColor: "#0C2D5B",
-        color: "#fff",
-        fontSize: "0.8rem",
-        padding: "8px 12px",
-      },
-    });
-  } finally {
-  }
+  console.log("Raw Axios response:", response.data);
+
+  toast.success("Property listed!", {
+    style: {
+      backgroundColor: "#0C2D5B",
+      color: "#fff",
+      fontSize: "0.8rem",
+      padding: "8px 12px",
+    },
+  });
+
+  setSuccess(true);
+} catch (error) {
+  console.error("Property listing error (raw):", error);
+
+  const errorMessage =
+    error?.response?.data?.message || "Error listing property!";
+
+  toast.error(errorMessage, {
+    style: {
+      backgroundColor: "#0C2D5B",
+      color: "#fff",
+      fontSize: "0.8rem",
+      padding: "8px 12px",
+    },
+  });
+}
+
 };
 
-  
-  const handleAmenityChange = (amenityName, checked) => {
-    let updated;
 
-    if (checked) {
-      updated = [...selectedAmenities, amenityName];
-    } else {
-      updated = selectedAmenities.filter((item) => item !== amenityName);
-    }
-
-    setSelectedAmenities(updated);
-
-    if (touched.selectedAmenities) {
-      if (updated.length > 0) {
-        setErrors((prev) => ({
-          ...prev,
-          selectedAmenities: undefined,
-        }));
-      } else {
-        setErrors((prev) => ({
-          ...prev,
-          selectedAmenities: "Select at least 1 amenity",
-        }));
-      }
-    }
-  };
   return (
     <div
       className={`lato-regular ${
@@ -501,18 +520,9 @@ console.log(data)
           </section>
         </div>
       )}
-     {success && <Success />}
- 
+      {success && <Success />}
     </div>
   );
 };
 
 export default AddProperty;
-
-
-
-
-
-
-
-

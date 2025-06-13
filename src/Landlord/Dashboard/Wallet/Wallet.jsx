@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Card from "./component/Card";
 import Modal from "./component/Modal";
 import TransactionTable from "./component/TransactionTable";
-import { getWalletBalance } from "../../../services/queries";
+import { getTransaction, getWalletBalance } from "../../../services/queries";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../context/authContext";
 import CardSkeleton from "./component/cardSkeleton";
@@ -14,6 +14,10 @@ const Wallet = () => {
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState("");
+  const [walletTransactions, setwalletTransactions] = useState([])
+
+
+
   const getbalance = async () => {
     try {
       const data = await getWalletBalance({ token });
@@ -32,12 +36,33 @@ const Wallet = () => {
       setLoading(false);
     }
   };
+
+    const transactions = async () => {
+    try {
+      const data = await getTransaction({ token });
+      setwalletTransactions(data?.data?.balance);
+    } catch (err) {
+      console.error("Error fetching listings:", err);
+      toast.error("Failed to fetch listings", {
+        style: {
+          backgroundColor: "#C8170D",
+          color: "#fff",
+          fontSize: "0.8rem",
+          padding: "8px 12px",
+        },
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     if (token) {
       getbalance();
+      transactions();
     }
   }, [token, reload]);
 
+  console.log(walletTransactions)
   if (loading) {
     return <CardSkeleton />
   }
@@ -46,14 +71,14 @@ const Wallet = () => {
       <Card open={() => setOpenModal(true)} deposit={() => setOpenDeposit(true)} balance={balance} />
       
         {openModal && (
-          <Modal  onClose={() => setOpenModal(false)} balance={10000}/>
+          <Modal  onClose={() => setOpenModal(false)} balance={balance}/>
         )}
       {openDeposit && (
-          <DepositModal  onClose={() => setOpenDeposit(false)} balance={10000}/>
+          <DepositModal  onClose={() => setOpenDeposit(false)} balance={balance}/>
         )}
       
       <div className="mt-14">
-        <TransactionTable />
+        <TransactionTable walletTransactions={walletTransactions}/>
       </div>
     </section>
   );

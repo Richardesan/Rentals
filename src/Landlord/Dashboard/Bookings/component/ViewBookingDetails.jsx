@@ -1,7 +1,7 @@
 import React from "react";
 import ContractTemplate from "./ContractTemplate";
 
-const ViewBookingDetails = ({ selectedProperty }) => {
+const ViewBookingDetails = ({ selectedProperty, myAgreement,myTenant, landlordSignature }) => {
     function addCommas(number) {
   if (!number || isNaN(Number(number))) return number;
 
@@ -72,7 +72,7 @@ const alladdress =selectedProperty.address.street + selectedProperty.address.cit
             </article>
           </div>
           <p className="text-2xl text-renatal-blue font-semibold">
-            ₦{addCommas(selectedProperty.price.toLocaleString())}
+            ₦{addCommas(myAgreement.rentAmount.toLocaleString())}
           </p>
         </div>
       </article>
@@ -101,13 +101,14 @@ const alladdress =selectedProperty.address.street + selectedProperty.address.cit
       <section className="w-full  flex items-center mt-9">
         <div className="basis-1/2 flex justify-center flex-col items-center">
           <p className="text-sm pb-5 text-renatal-blue font-semibold">Property owner’s Signature</p>
-          <img src="/signature.svg" alt="signature.png" className="w-16 object-cover"/>
+          <img src={landlordSignature} alt="signature.png" className="w-28 object-cover"/>
         </div>
-          <div className="basis-1/2 flex justify-center flex-col items-center">
+        
+        {myAgreement.tenantSignatureDate && <div className="basis-1/2 flex justify-center flex-col items-center">
           <p className="text-sm pb-5 text-renatal-blue font-semibold">Tenant Signature</p>
-          <img src="/signature.svg" alt="signature.svg" className="w-16  object-cover" />
+          <img src={myTenant.signature} alt="signature.svg" className="w-28  object-cover" />
         </div>
-      
+      }
         </section> 
          </article>
     </div>

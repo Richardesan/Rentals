@@ -78,11 +78,11 @@ const [loading, setLoading] = useState(false)
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 cursor-pointer"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative overflow-hidden"
+        className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative overflow-hidden cursor-default"
         onClick={(e) => e.stopPropagation()} // prevent modal box clicks from closing
       >
         <button

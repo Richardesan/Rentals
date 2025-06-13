@@ -90,3 +90,14 @@ export const getSingleAgreeement = async ({ token, id }) => {
   return data;
 
 }
+
+export const getTransaction = async ({ token, page=1, limit=4}) => {
+  const { data } = await authenticatedAPI(token).get(`wallet?page=${page}&limit=${limit}`);
+  return data;
+};
+
+export const publishAgreement = async ({ token, credentials }) => {
+  const { data } = await authenticatedAPI(token).post(`agreement/create`,credentials )
+  return data;
+
+}
