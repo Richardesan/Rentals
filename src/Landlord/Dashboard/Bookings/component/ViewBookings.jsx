@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import ListLayout from "../../Property/PropertyListingDetails/component/listLayout";
+// import ListLayout from "../../Property/PropertyListingDetails/component/listLayout";
 import BookingListLayout from "./bookingListLayout";
-import Details from "../../Property/PropertyListingDetails/component/details";
+// import Details from "../../Property/PropertyListingDetails/component/details";
 import ViewBookingDetails from "./ViewBookingDetails";
 import { AppRoutes } from "../../../../utils/route";
 import { IoMdCall } from "react-icons/io";
 import { CiMail } from "react-icons/ci";
 import { useAuth } from "../../../../context/authContext";
-import { getSingleAgreeement } from "../../../../services/queries";
+import { downloadAgreement, getSingleAgreeement } from "../../../../services/queries";
 import Spinner from "../../../../component/Spinner";
+import ButtonSpinner from "../../../../component/ButtonSpinner";
+import { jsPDF } from "jspdf";
+
 const ViewBookings = () => {
   const { bookingid } = useParams();
   const [listingData, setListingData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [myloading, setMyloading] = useState(false)
+const [downloadbooking, setDownloadBooking]= useState(null)
+const [reload, setReload]= useState(false)
   const { token } = useAuth();
 
   const getMyAgreement = async () => {
@@ -29,11 +34,43 @@ const ViewBookings = () => {
     }
   };
 
+
+  const agreementdownload = async () => {
+    setMyloading(true);
+    try {
+      const data = await downloadAgreement({ token, id: bookingid });
+      setDownloadBooking(data);
+    } catch (err) {
+      console.error("Error fetching listing:", err);
+    } finally {
+      setMyloading(false);
+    }
+  };
+console.log(typeof downloadbooking);
+
+
+const handleDownload = () => {
+  if (!downloadbooking) return;
+
+  const blob = new Blob([downloadbooking], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "booking.pdf";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url); // Clean up
+};
+
   useEffect(() => {
     if (token && bookingid) {
       getMyAgreement();
+      agreementdownload()
     }
-  }, [token, bookingid]);
+  }, [token, bookingid, reload]);
 
   const myAgreement = listingData?.agreement;
   const myListing = listingData?.listing;
@@ -59,10 +96,10 @@ const ViewBookings = () => {
         <h1 className="text-2xl text-renatal-blue font-semibold">
           AGR-{myAgreement?.id}
         </h1>
-        <button className="bg-primaryCol text-white flex items-center font-semibold rounded-md w-fit  px-7 py-2 gap-x-3 cursor-pointer">
+        <button disabled={myloading} className="bg-primaryCol text-white flex items-center font-semibold rounded-md w-fit  px-7 py-2 gap-x-3 cursor-pointer" onClick={handleDownload}>
           <img src="/arrowdown.png" alt="arrowdown.png" />
 
-          <p>Download</p>
+       Download
         </button>
       </div>
       <div className="flex items-center gap-x-9 mb-7">
@@ -80,6 +117,7 @@ const ViewBookings = () => {
               myAgreement={myAgreement}
               myTenant={myTenant}
               landlordSignature={landlordSignature}
+              setReload={setReload}
             />
           )}
         </article>

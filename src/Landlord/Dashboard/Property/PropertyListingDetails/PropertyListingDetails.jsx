@@ -4,10 +4,8 @@ import Amenities from "./component/amenities";
 import NavList from "./component/navList";
 import ListLayout from "./component/listLayout";
 import Details from "./component/details";
-import Reservation from "./component/reservation";
 import { useAuth } from "../../../../context/authContext";
 import { getAllListing } from "../../../../services/queries";
-import Loading from "../../../../component/Loading";
 import SkeletonImageGallery from "./component/SkeletonImageGallery ";
 const LandlordListingDetails = () => {
   const { token } = useAuth()
@@ -40,7 +38,6 @@ const LandlordListingDetails = () => {
       getList();
     }
   }, [token]);
-console.log(myList)
 
 
 const selectedProperty = myList?.find((item) => item.id === id);

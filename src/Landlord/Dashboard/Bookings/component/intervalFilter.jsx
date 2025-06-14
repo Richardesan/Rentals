@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
 
-const filterOptions = ["Daily", "Weekly", "Monthly", "Yearly"];
+const filterOptions = [ "Monthly", "Quarterly", "Bi_annually", "annually"];
 
 export default function IntervalFilter({ selected, onChange }) {
   const [open, setOpen] = useState(false);

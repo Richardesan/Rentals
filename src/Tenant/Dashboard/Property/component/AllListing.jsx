@@ -65,8 +65,7 @@ const AllListing = () => {
           key={index}
           id={data.id}
           name={data.title}
-          firstName={user?.firstname}
-          lastName={user?.lastname}
+          firstName={data.landlordName}
           location={data.address}
           price={data.price}
           beds={data.numberOfBedrooms}

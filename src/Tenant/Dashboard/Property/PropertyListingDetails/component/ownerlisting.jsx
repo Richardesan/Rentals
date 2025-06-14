@@ -84,7 +84,7 @@ const OwnerListing = () => {
   return (
     <section className="flex items-center justify-center gap-5 flex-wrap">
 
-      
+{/*       
       {listingData.map((data, index) => {
         return (
           <ListingCard
@@ -101,7 +101,7 @@ const OwnerListing = () => {
           />
         )
       })}
-      
+       */}
     </section>
   );
 };

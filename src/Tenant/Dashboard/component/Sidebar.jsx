@@ -24,7 +24,7 @@ const Sidebar = () => {
       <article className="mt-28">
         <img src="/newLogo.svg" />
         <section className="text-lg font-semibold space-y-3 mt-9 capitalize">
-          <div>
+          {/* <div>
             <Link
               to={AppRoutes.dashboard}
               className={`flex gap-x-2 items-center p-2 rounded-md cursor-pointer ${getLinkClass(
@@ -34,7 +34,7 @@ const Sidebar = () => {
               <img src="/dashboard.svg" />
               <p>Dashboard</p>
             </Link>
-          </div>
+          </div> */}
           <div>
             <Link
               to={AppRoutes.property}
@@ -60,10 +60,8 @@ const Sidebar = () => {
 
           <div>
             <Link
-              to={AppRoutes.chats}
-              className={`flex gap-x-2 items-center p-2 rounded-md cursor-pointer ${getLinkClass(
-                ["/tenant/dashboard/chats"]
-              )}`}
+            
+              className={`flex gap-x-2 items-end p-2 rounded-md cursor-not-allowed opacity-40`}
             >
               <img src="/chat.svg" />
               <p>Chat</p>
@@ -81,8 +79,21 @@ const Sidebar = () => {
                 <img src="/wallet.svg" />
                 <p>Wallet</p>
               </div>
-<FaCaretDown />            </Link>
+          </Link>
           </div>
+            <div>
+                      <Link
+                        to={AppRoutes.Savings}
+                        className={`flex gap-x-2 items-center justify-between p-2 rounded-md cursor-pointer ${getLinkClass(
+                          ["/tenant/dashboard/savings", "/tenant/dashboard/savingsplan"]
+                        )}`}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <img src="/wallet.svg" />
+                          <p>Savings Plan</p>
+                        </div>
+                   </Link>
+                    </div>
 
           {/* <div>
             <Link

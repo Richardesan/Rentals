@@ -1,17 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import ContractTemplate from "./ContractTemplate";
+import ButtonSpinner from "../../../../component/ButtonSpinner";
+import TerminateModal from "./terminateModal";
 
-const ViewBookingDetails = ({ selectedProperty, myAgreement,myTenant, landlordSignature }) => {
-    function addCommas(number) {
-  if (!number || isNaN(Number(number))) return number;
+const ViewBookingDetails = ({
+  selectedProperty,
+  myAgreement,
+  myTenant,
+  landlordSignature,
+  setReload,
+}) => {
+  function addCommas(number) {
+    if (!number || isNaN(Number(number))) return number;
 
-  const [intPart, decimalPart] = String(number).split(".");
+    const [intPart, decimalPart] = String(number).split(".");
 
-  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  return decimalPart ? `${formattedInt}.${decimalPart}` : formattedInt;
-}
-const alladdress =selectedProperty.address.street + selectedProperty.address.city + selectedProperty.address.state + selectedProperty.address.country
+    return decimalPart ? `${formattedInt}.${decimalPart}` : formattedInt;
+  }
+  const [isCheckboxValid, setIsCheckboxValid] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [open, setOpen] = useState(false);
+
   return (
     <div>
       <article className="bg-rental-deep/10 py-8 px-5 mt-5 rounded-lg">
@@ -21,7 +33,9 @@ const alladdress =selectedProperty.address.street + selectedProperty.address.cit
           <div>
             <p className="text-xl mb-2 font-semibold">
               Apartment by{" "}
-              <span className="capitalize">{selectedProperty.landlordName}</span>
+              <span className="capitalize">
+                {selectedProperty.landlordName}
+              </span>
             </p>
 
             <div className="flex gap-x-0.5 items-center">
@@ -32,13 +46,13 @@ const alladdress =selectedProperty.address.street + selectedProperty.address.cit
               />
 
               <p className="text-sm text-black/50">
-                {selectedProperty.address.street}, 
-               <span className="pl-1"></span> {selectedProperty.address.city}, 
-             <span className="pl-1"></span>   {selectedProperty.address.state}, 
-               <span className="pl-1"></span> {selectedProperty.address.country}, 
+                {selectedProperty.address.street},<span className="pl-1"></span>{" "}
+                {selectedProperty.address.city},<span className="pl-1"></span>{" "}
+                {selectedProperty.address.state},<span className="pl-1"></span>{" "}
+                {selectedProperty.address.country},
               </p>
             </div>
-            <article className="flex justify-between items-center text-sm mt-5 ">
+            <article className="flex justify-between items-center text-sm mt-5 w-fit gap-x-6">
               <div className="flex gap-x-0.5 items-center ">
                 <img
                   src="/bedYellow.svg"
@@ -82,35 +96,76 @@ const alladdress =selectedProperty.address.street + selectedProperty.address.cit
         </h1>
         <p className="mt-2 text-rental-dark font-semibold">General Terms</p>
         <p className="text-base text-rental-dark/60 font-semiibold w-11/12 pl-2 py-2">
-          <ContractTemplate
-  landlordFullName={selectedProperty.landlordName}
-  landlordFullAddress={alladdress}
-  agentName=" Agent"
-  agentFullAddress="456 Agent Lane, Lagos"
-  propertyAddress={alladdress}
-  tenantFullName="Richard Tenant"
-  tenantAddress="101 Tenant Rd, Port Harcourt"
-  startDate="June 1, 2025"
-  endDate="May 31, 2026"
-  annualRent="500000"
-  securityDeposit="50000"
-  agentFee="50000"
-/>
+          {myAgreement.termsAndConditions}
         </p>
-     
-      <section className="w-full  flex items-center mt-9">
-        <div className="basis-1/2 flex justify-center flex-col items-center">
-          <p className="text-sm pb-5 text-renatal-blue font-semibold">Property owner’s Signature</p>
-          <img src={landlordSignature} alt="signature.png" className="w-28 object-cover"/>
-        </div>
-        
-        {myAgreement.tenantSignatureDate && <div className="basis-1/2 flex justify-center flex-col items-center">
-          <p className="text-sm pb-5 text-renatal-blue font-semibold">Tenant Signature</p>
-          <img src={myTenant.signature} alt="signature.svg" className="w-28  object-cover" />
-        </div>
-      }
-        </section> 
-         </article>
+
+        <section className="w-full  flex items-center justify-center mt-9">
+          <div className="basis-1/2 flex justify-center flex-col items-center">
+            <p className="text-sm pb-5 text-renatal-blue font-semibold">
+              Property owner’s Signature
+            </p>
+            <img
+              src={landlordSignature}
+              alt="signature.png"
+              className="w-28 h-28 object-cover"
+            />
+          </div>
+
+          {myAgreement.tenantSignatureDate && (
+            <div className="basis-1/2 flex justify-center flex-col items-center">
+              <p className="text-sm pb-5 text-renatal-blue font-semibold">
+                Tenant Signature
+              </p>
+              <img
+                src={myTenant.signature}
+                alt="signature.svg"
+                className="w-28 h-28 object-cover"
+              />
+            </div>
+          )}
+        </section>
+      {!myAgreement.tenantSignatureDate && <div>
+          {myAgreement.terminationReason ? (
+            <p className="text-danger font-bold mt-5">
+              This Property has been terminated/cancelled
+            </p>
+          ) : (
+            <div>
+              <label className="flex gap-x-2 mt-9">
+                <input
+                  type="checkbox"
+                  className="accent-renatal-blue"
+                  checked={isCheckboxValid}
+                  onChange={(e) => setIsCheckboxValid(e.target.checked)}
+                />
+                <p className="text-sm text-renatal-blue font-semibold cursor-pointer">
+                  By proceeding, you would terminate this contract
+                </p>
+              </label>
+
+              <div className="flex justify-center gap-x-5 capitalize mt-5">
+                <button
+                  onClick={() => setOpen(true)}
+                  disabled={loading || !isCheckboxValid}
+                  className={`w-28 py-2 rounded-md font-bold flex justify-center items-center text-white ${
+                    loading || !isCheckboxValid
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-red-700"
+                  }`}
+                >
+                  {loading ? <ButtonSpinner /> : "Terminate"}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>}
+      </article>
+      <TerminateModal
+        isOpen={open}
+        myAgreementID={myAgreement.id}
+        onClose={() => setOpen(false)}
+        setReload={setReload}
+      />
     </div>
   );
 };

@@ -22,9 +22,9 @@ const Details = ({selectedProperty}) => {
               className="object-cover w-4"
             />
 
-            <p className="text-sm text-black/50">{selectedProperty.address.city}, {selectedProperty.address.state}, {selectedProperty.address.country}</p>
+            <p className="text-sm text-black/50">{selectedProperty.address.street} {selectedProperty.address.city}, {selectedProperty.address.state}, {selectedProperty.address.country}</p>
           </div>
-            <article className="flex justify-between items-center text-sm mt-5">
+            <article className="flex justify-between items-center text-sm mt-5 w-fit gap-x-6">
             <div className="flex gap-x-0.5 items-center ">
               <img
                 src="/bedYellow.svg"
@@ -33,7 +33,7 @@ const Details = ({selectedProperty}) => {
               />
               <p>{selectedProperty.numberOfBedrooms} Bed{selectedProperty.numberOfBedrooms > 1 ? "s" : ""}</p>
             </div>
-            <div className="flex gap-x-0.5 items-center ">
+            <div className="flex gap-x-0.5 items-center "> 
               <img
                 src="/bathtubYellow.svg"
                 alt="blackbathtub"
@@ -55,7 +55,7 @@ const Details = ({selectedProperty}) => {
         <p className="text-2xl font-semibold text-renatal-blue">₦{addCommas(selectedProperty.price.toLocaleString())}</p>
       </div>
       <h1 className="text-2xl font-semibold mt-3">Description</h1>
-      <p className="text-base w-9/12 pl-2 py-2">{selectedProperty.description}</p>
+      <p className="text-base w-9/12 pl-2 py-2 overflow-hidden break-words">{selectedProperty.description}</p>
     </div>
   )
 }

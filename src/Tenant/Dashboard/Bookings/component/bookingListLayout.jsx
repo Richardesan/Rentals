@@ -2,18 +2,35 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LiaBedSolid } from "react-icons/lia";
 
-const BookingListLayout = ({ selectedProperty }) => {
+const BookingListLayout = ({ selectedProperty, myAgreement, myListing }) => {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [startIndex, setStartIndex] = useState(null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
-  const images = selectedProperty.locationImage;
+  const images = selectedProperty?.images;
   const openViewerAt = (index) => {
     setStartIndex(index);
     setIsViewerOpen(true);
   };
-  const totalImages = images.length;
+  const totalImages = images?.length;
+function formatDateString(isoDateString) {
+  const date = new Date(isoDateString);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString(undefined, options);
+}
+
+function getDurationInYears(startDateStr, endDateStr) {
+  const start = new Date(startDateStr);
+  const end = new Date(endDateStr);
+
+  const diffInMs = end - start;
+  const msInYear = 1000 * 60 * 60 * 24 * 365.25; // accounting for leap years
+  const years = diffInMs / msInYear;
+
+  return years.toFixed(2); // returns a string like "1.25"
+}
+
 
   const paginate = (newDirection) => {
     setDirection(newDirection);
@@ -53,7 +70,7 @@ const BookingListLayout = ({ selectedProperty }) => {
   const goRight = () => {
     if (
       startIndex !== null &&
-      startIndex < selectedProperty.locationImage.length - 1
+      startIndex < selectedProperty.images.length - 1
     ) {
       setStartIndex((prev) => prev + 1);
     }
@@ -66,7 +83,7 @@ const BookingListLayout = ({ selectedProperty }) => {
           <AnimatePresence initial={false} custom={direction}>
             <motion.img
               key={currentIndex}
-              src={images[currentIndex]}
+              src={images[currentIndex]?.fileUrl}
               alt={`Image ${currentIndex + 1}`}
               custom={direction}
               variants={variants}
@@ -96,37 +113,41 @@ const BookingListLayout = ({ selectedProperty }) => {
 
             
           <h1 className="font-bold text-rental-dark text-lg">Available Status</h1>
-          <div className="flex justify-start items-center gap-x-1 p-2 px-6 rounded-full w-fit mx-auto mt-4 bg-[#27AE6059]">
+         {myListing.availability === "available" ?<div className="flex justify-start items-center gap-x-1 p-2 px-6 rounded-full w-fit mx-auto mt-4 bg-[#27AE6059]">
             <img
-              src="/check.png"
+              src="/check.svg"
               alt="check.png"
               className="w-6 h-6 object-cover"
             />
-            <p className="text-[#009A49] font-bold ">Available</p>
-            </div>
+            <p className="text-[#009A49] font-bold "> Available</p>
+            </div>:<div className="flex justify-start items-center gap-x-1 p-2 px-6 rounded-full w-fit mx-auto mt-4 bg-gray-400">
+            {/* <img
+              src="/check.svg"
+              alt="check.png"
+              className="w-6 h-6 object-cover"
+            /> */}
+            <p className="text-white font-bold ">Not Available</p>
+            </div> }
           </div>
           <section className="items-end  space-y-4">
             <div className=" ">
               <p className="text-darkText/70">Start Date</p>
-              <p className="font-semibold text-darkText/80 mt-1">May 1, 2025</p>
+              <p className="font-semibold text-darkText/80 mt-1">{formatDateString(myAgreement.startDate)}</p>
             </div>
             <div className=" ">
               <p className="text-darkText/70">End Date</p>
               <p className="font-semibold text-darkText/80 mt-1">
-                November 1, 2030
+                {formatDateString(myAgreement.endDate)}
               </p>
             </div>
             <div className=" ">
               <p className="text-darkText/70">Renewal Option</p>
-              <p className="font-semibold text-darkText/80 mt-1">5 years</p>
+              <p className="font-semibold text-darkText/80 mt-1">{getDurationInYears(myAgreement.startDate, myAgreement.endDate)} years</p>
             </div>
             <div className=" ">
-              <p className="text-darkText/70">Duration</p>
+              <p className="text-darkText/70">Description</p>
               <p className=" text-sm mt-1 max-h-16 py-1 overflow-y-auto">
-                Option to renew for additional 6 months with 30 days notice. 5%
-                increase in monthly rent applies to renewal term.
-                Option to renew for additional 6 months with 30 days notice. 5%
-                increase in monthly rent applies to renewal term.
+                {selectedProperty.description}
                    
               </p>
             </div>
@@ -148,7 +169,7 @@ const BookingListLayout = ({ selectedProperty }) => {
             ‹
           </button>
           <img
-            src={selectedProperty.locationImage[startIndex]}
+            src={selectedProperty.images[startIndex]?.fileUrl}
             alt={`Image ${startIndex + 1}`}
             className="max-w-[90%] max-h-[90%] object-contain rounded shadow"
           />

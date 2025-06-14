@@ -14,9 +14,7 @@ const Wallet = () => {
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState("");
-  const [walletTransactions, setwalletTransactions] = useState([])
-
-
+  const [walletTransactions, setwalletTransactions] = useState([]);
 
   const getbalance = async () => {
     try {
@@ -37,7 +35,7 @@ const Wallet = () => {
     }
   };
 
-    const transactions = async () => {
+  const transactions = async () => {
     try {
       const data = await getTransaction({ token });
       setwalletTransactions(data?.data?.balance);
@@ -62,24 +60,49 @@ const Wallet = () => {
     }
   }, [token, reload]);
 
-  console.log(walletTransactions)
+  console.log(walletTransactions);
   if (loading) {
-    return <CardSkeleton />
+    return <CardSkeleton />;
   }
+
+  function addCommas(number) {
+    if (!number || isNaN(Number(number))) return number;
+
+    const fixed = Number(number).toFixed(2); // Ensures 2 decimal places
+    const [intPart, decimalPart] = fixed.split(".");
+
+    const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    return `${formattedInt}.${decimalPart}`;
+  }
+
   return (
     <section>
-      <Card open={() => setOpenModal(true)} deposit={() => setOpenDeposit(true)} balance={balance} />
-      
-        {openModal && (
-          <Modal  onClose={() => setOpenModal(false)} balance={balance}/>
-        )}
+      <Card
+        open={() => setOpenModal(true)}
+        deposit={() => setOpenDeposit(true)}
+        balance={balance}
+      />
+
+      {openModal && (
+        <Modal onClose={() => setOpenModal(false)} balance={balance} />
+      )}
       {openDeposit && (
-          <DepositModal  onClose={() => setOpenDeposit(false)} balance={balance}/>
-        )}
-      
-      <div className="mt-14">
-        <TransactionTable walletTransactions={walletTransactions}/>
-      </div>
+        <DepositModal onClose={() => setOpenDeposit(false)} balance={balance} />
+      )}
+
+      {walletTransactions.length < 1 ? (
+        <div className="mt-10 text-center h-[40vh] flex flex-col justify-center items-center">
+          <p className="mt-2 font-bold text-rental-dark/80">
+            Oh snap! There is nothing here
+          </p>
+          <p className="mt-4 text-xs">You do not have any Transactions yet</p>
+        </div>
+      ) : (
+        <div className="mt-14">
+          <TransactionTable walletTransactions={walletTransactions} />
+        </div>
+      )}
     </section>
   );
 };

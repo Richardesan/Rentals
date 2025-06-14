@@ -15,8 +15,8 @@ const BookingsTable = ({ getagreementData }) => {
 
   const getTransactionTypeClass = (type) => {
     switch (type.toLowerCase()) {
-      case "cancelled":
-        return "bg-[#FF1414]";
+      case "canceled":
+        return "bg-[#DC2626]";
       case "signed":
         return "bg-[#388E3C]";
       case "pending":

@@ -39,11 +39,14 @@ const ListingCard = ({
     
 
       <article className="basis-[60%] z-10 h-60 overflow-hidden rounded-xl relative group cursor-pointer">
+          <Link to={`/tenant/dashboard/listingdetails/${id}`} className="w-full">
         <img
           src={locationImage[0]?.fileUrl}
           alt={locationImage[0]}
           className="w-full h-full object-cover bg-black transition-transform duration-300 transform group-hover:scale-110"
         />
+          </Link>
+
         <p
           className={`absolute capitalize text-white top-2 left-2 rounded-full px-7 text-sm font-semibold py-1 ${getTransactionTypeClass(
             status

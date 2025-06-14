@@ -7,12 +7,13 @@ import Success from "./success";
 import { addLandlordProperty } from "../../../../services/queries";
 import { useAuth } from "../../../../context/authContext";
 import axios from "axios";
+import ButtonSpinner from "../../../../component/ButtonSpinner";
 const AddProperty = () => {
   const { token } = useAuth();
   const formRef = useRef(null);
   const [rent, setRent] = useState("");
-  const [filter, setFilter] = useState("Daily");
-  const [typeDrop, setTypeDrop] = useState("Single home");
+  const [filter, setFilter] = useState("Monthly");
+  const [typeDrop, setTypeDrop] = useState("Apartment");
   const [images, setImages] = useState([]);
   const [poofImages, setpoofImages] = useState([]);
   const [title, setTitle] = useState("");
@@ -32,7 +33,7 @@ const AddProperty = () => {
   const addCommas = (number) => number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const removeCommas = (number) => number.replace(/,/g, "");
   const allAmenities = ["Power", "Water", "Parking", "Security", "wifi"];
-
+  const [loading, setLoading] = useState(false)
   const amenityFlags = allAmenities.reduce((acc, amenity) => {
     acc[amenity] = selectedAmenities.includes(amenity);
     return acc;
@@ -193,12 +194,12 @@ const AddProperty = () => {
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const newFiles = [...images, ...selectedFiles];
-    if (touched.images && newFiles.length >= 3) {
+    if (touched.images && newFiles.length >= 2) {
       setErrors((prev) => ({ ...prev, images: undefined }));
     }
 
-    if (newFiles.length > 10) {
-      toast.error("You can only upload a maximum of 10 images.", {
+    if (newFiles.length > 6) {
+      toast.error("You can only upload a maximum of 6 images.", {
         style: {
           backgroundColor: "#C8170D",
           color: "#fff",
@@ -263,7 +264,7 @@ const AddProperty = () => {
       name: "Security",
     },
   ];
-  const btnStyle = `bg-renatal-blue text-white py-2.5 px-9 rounded-lg w-fit capitalize font-semibold`;
+  const btnStyle = ` text-white py-2.5 px-9 rounded-lg  capitalize font-semibold`;
 
   const validate = () => {
     const newErrors = {};
@@ -299,8 +300,8 @@ const AddProperty = () => {
     if (!street.trim()) {
       newErrors.street = "required";
     }
-    if (images.length < 3) {
-      newErrors.images = "Please upload at least 3 images.";
+    if (images.length < 2) {
+      newErrors.images = "Please upload at least 2 images.";
     }
     if (poofImages.length < 2) {
       newErrors.poofImages = "Please upload at least 2 images";
@@ -327,9 +328,7 @@ const AddProperty = () => {
     } else {
       updated = selectedAmenities.filter((item) => item !== amenityName);
     }
-
     setSelectedAmenities(updated);
-
     if (touched.selectedAmenities) {
       if (updated.length > 0) {
         setErrors((prev) => ({
@@ -366,64 +365,54 @@ const handleSubmit = async () => {
 
   const rawRent = Number(removeCommas(rent));
 
-  const propertyPayload = {
-    title,
-    description,
-    "address[zipCode]": zipCode,
-    "address[state]": mystate,
-    "address[city]": city,
-    "address[street]": street,
-    propertyType: "apartment",
-    numberOfBedrooms: mybedroom,
-    numberOfBathrooms: myBathRooms,
-    numberOfKitchen: mykitchen,
-    "amenities[wifi]": amenityFlags.wifi,
-    "amenities[power]": amenityFlags.Power,
-    "amenities[parking]": amenityFlags.Parking,
-    "amenities[water]": amenityFlags.Water,
-    "amenities[securitySystem]": amenityFlags.Security,
-    price: rawRent,
-    paymentTerm: "annually",
-    visibility: "public property",
-    availability,
-    proofOfOwnership: poofImages,
-    images,
-  };
+const formData = new FormData();
 
-  const formData = new FormData();
+formData.append("title", title);
+formData.append("description", description);
 
-  Object.entries(propertyPayload).forEach(([key, value]) => {
-    // 🟩 1. Files
-    if (
-      Array.isArray(value) &&
-      (key === "images" || key === "proofOfOwnership")
-    ) {
-      if (value.length === 0) {
-        throw new Error(`Missing files for ${key}`);
-      }
-      value.forEach((file) => {
-        if (file instanceof File) {
-          formData.append(`${key}[]`, file);
-        }
-      });
-    }
+// Address fields
+formData.append("address[zipCode]", zipCode);
+formData.append("address[state]", mystate);
+formData.append("address[city]", city);
+formData.append("address[street]", street);
 
-    // 🟩 2. Booleans
-    else if (typeof value === "boolean") {
-      formData.append(key, String(value));
-    }
+// Property details
+formData.append("propertyType", typeDrop.toLowerCase());
+formData.append("numberOfBedrooms", String(mybedroom));
+formData.append("numberOfBathrooms", String(myBathRooms));
+formData.append("numberOfKitchen", String(mykitchen));
 
-    // 🟩 3. Non-empty strings/numbers
-    else if (value !== null && value !== undefined && value !== "") {
-      formData.append(key, String(value));
-    }
+// Amenities
+formData.append("amenities[wifi]", String(amenityFlags.wifi));
+formData.append("amenities[power]", String(amenityFlags.Power));
+formData.append("amenities[parking]", String(amenityFlags.Parking));
+formData.append("amenities[water]", String(amenityFlags.Water));
+formData.append("amenities[securitySystem]", String(amenityFlags.Security));
 
-    // 🟨 4. Skipped values (null, undefined, empty) — intentional
-  });
+// Other fields
+formData.append("price", String(rawRent));
+formData.append("paymentTerm", filter.toLowerCase());
+formData.append("visibility", "public property");
+formData.append("availability", availability);
+
+// Files (images)
+images.forEach((file) => {
+  if (file instanceof File) {
+    formData.append("images", file); // ✅ removed []
+  }
+});
+
+// Files (proof of ownership)
+poofImages.forEach((file) => {
+  if (file instanceof File) {
+    formData.append("proofOfOwnership", file); // ✅ removed []
+  }
+});
+setLoading(true)
 
   try {
   const response = await axios.post(
-    "https://splendid-bluejay-eminently.ngrok-free.app/api/v1/property/listing",
+    `${import.meta.env.VITE_API_URL}property/listing`,
     formData, // Ensure this is a valid FormData object
     {
       headers: {
@@ -433,8 +422,7 @@ const handleSubmit = async () => {
       },
     }
   );
-
-  console.log("Raw Axios response:", response.data);
+console.log(response)
 
   toast.success("Property listed!", {
     style: {
@@ -451,7 +439,7 @@ const handleSubmit = async () => {
 
   const errorMessage =
     error?.response?.data?.message || "Error listing property!";
-
+console.log(error)
   toast.error(errorMessage, {
     style: {
       backgroundColor: "#0C2D5B",
@@ -460,6 +448,8 @@ const handleSubmit = async () => {
       padding: "8px 12px",
     },
   });
+} finally {
+  setLoading(false)
 }
 
 };
@@ -514,8 +504,8 @@ const handleSubmit = async () => {
               </div>
             </Link>
 
-            <button className={`${btnStyle}`} onClick={handleSubmit}>
-              Publish Property
+            <button disabled={loading} className={`${btnStyle} w-52 flex justify-center ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-renatal-blue"}`} onClick={handleSubmit}>
+             { loading ? <ButtonSpinner />: ` Publish Property`}
             </button>
           </section>
         </div>

@@ -78,15 +78,17 @@ function handleRecipt(id) {
         return "text-gray-600";
     }
   };
-  function addCommas(number) {
+function addCommas(number) {
   if (!number || isNaN(Number(number))) return number;
 
-  const [intPart, decimalPart] = String(number).split(".");
+  const fixed = Number(number).toFixed(2); // Ensures 2 decimal places
+  const [intPart, decimalPart] = fixed.split(".");
 
   const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  return decimalPart ? `${formattedInt}.${decimalPart}` : formattedInt;
+  return `${formattedInt}.${decimalPart}`;
 }
+
   function closeModal() {
     setSelectedProperty(null);
   }
@@ -153,7 +155,7 @@ function handleRecipt(id) {
           {walletTransactions?.map((data, index) => (
             <tr
               onClick={() => {
-                handleRecipt(data.id)
+                // handleRecipt(data.id)
               }
               
               }

@@ -5,36 +5,12 @@ import { getAllListing } from "../../../../services/queries";
 import { toast } from "react-toastify";
 import Loading from "../../../../component/Loading";
 import ListingSkeletonGroup from "./ListingSkeletonGroup";
+import FilterListing from "./Filter";
 
-const AllListing = () => {
-  const { user, token } = useAuth();
-  const [myList, setMylist] = useState([]);
-    const [loading, setLoading] = useState(true);
-  const [reload, setReload] = useState(false); 
+const AllListing = ({loading, myList, setReload}) => {
 
-  const getList = async () => {
-    try {
-      const data = await getAllListing({ token });
-      setMylist(data?.data?.listings);
-    } catch (err) {
-      console.error("Error fetching listings:", err);
-      toast.error("Failed to fetch listings", {
-        style: {
-          backgroundColor: "#C8170D",
-          color: "#fff",
-          fontSize: "0.8rem",
-          padding: "8px 12px",
-        },
-      });
-    }  finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (token) {
-      getList();
-    }
-  }, [token, reload]);
+
+
  if (loading) {
     return (
       <section className="flex items-center justify-center">
@@ -45,6 +21,8 @@ const AllListing = () => {
 
    if (myList.length === 0) {
     return (
+      <div>
+        
       <section className="flex items-center justify-center ">
         <div className="max-w-md p-2 flex flex-col justify-center items-center">
           <div className="w-28 h-28">
@@ -58,10 +36,14 @@ const AllListing = () => {
           </p>
         </div>
       </section>
+      </div>
+
     );
   }
 
   return (
+    <div>
+
     <section className={`flex items-center  gap-5 flex-wrap ${myList.length === 1 ? "justify-start": "justify-center"}`}>
       {myList.map((data, index) => (
         <ListingCard
@@ -69,8 +51,7 @@ const AllListing = () => {
           key={index}
           id={data.id}
           name={data.title}
-          firstName={user?.firstname}
-          lastName={user?.lastname}
+          firstName={data?.landlordName}
           location={data.address}
           price={data.price}
           beds={data.numberOfBedrooms}
@@ -81,6 +62,8 @@ const AllListing = () => {
         />
       ))}
     </section>
+    </div>
+
   );
 };
 

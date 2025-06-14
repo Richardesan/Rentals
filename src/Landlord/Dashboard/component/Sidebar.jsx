@@ -9,7 +9,6 @@ const Sidebar = () => {
 
   const getLinkClass = (paths) => {
     return paths.some((path) => {
-      // Handle dynamic path like "/dashboard/PropertyListingDetails/:id"
       if (path.includes(":")) {
         const basePath = path.split("/:")[0];
         return location.pathname.startsWith(basePath);
@@ -24,7 +23,7 @@ const Sidebar = () => {
       <article className="mt-28">
         <img src="/newLogo.svg" />
         <section className="text-lg font-semibold space-y-3 mt-9 capitalize">
-          <div>
+          {/* <div>
             <Link
               to={AppRoutes.landlordDashboard}
               className={`flex gap-x-2 items-center p-2 rounded-md cursor-pointer ${getLinkClass(
@@ -34,7 +33,7 @@ const Sidebar = () => {
               <img src="/dashboard.svg" />
               <p>Dashboard</p>
             </Link>
-          </div>
+          </div> */}
           <div>
             <Link
               to={AppRoutes.landlordProperty}
@@ -60,10 +59,8 @@ const Sidebar = () => {
 
           <div>
             <Link
-              to={AppRoutes.landlordChats}
-              className={`flex gap-x-2 items-center p-2 rounded-md cursor-pointer ${getLinkClass(
-                ["/landlord/dashboard/chats"]
-              )}`}
+             
+              className={`flex gap-x-2 items-end p-2 rounded-md cursor-not-allowed opacity-40 `}
             >
               <img src="/chat.svg" />
               <p>Chat</p>
@@ -81,7 +78,20 @@ const Sidebar = () => {
                 <img src="/wallet.svg" />
                 <p>Wallet</p>
               </div>
-<FaCaretDown />            </Link>
+         </Link>
+          </div>
+            <div>
+            <Link
+              to={AppRoutes.landlordSavings}
+              className={`flex gap-x-2 items-center justify-between p-2 rounded-md cursor-pointer ${getLinkClass(
+                ["/landlord/dashboard/savings", "/landlord/dashboard/savingsplan"]
+              )}`}
+            >
+              <div className="flex items-center gap-x-2">
+                <img src="/wallet.svg" />
+                <p>Savings Plan</p>
+              </div>
+         </Link>
           </div>
 
           {/* <div>

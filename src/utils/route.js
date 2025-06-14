@@ -11,8 +11,9 @@ export const AppRoutes = {
   chats: "/tenant/dashboard/chats",
   profile: "/tenant/dashboard/profile",
   viewBookings: "/tenant/dashboard/viewagreement/:tenantbookid",
-  savingsplan: "/tenant/dashboard/wallet/savingsplan",
-  PropertyListingDetails: "/tenant/dashboard/PropertyListingDetails/:id",
+  Savings: "/tenant/dashboard/savings",
+  savingsplan: "/tenant/dashboard/savingsplan",
+  PropertyListingDetails: "/tenant/dashboard/listingdetails/:id",
   landlordDashboard: "/landlord/dashboard",
   landlordWallet: "/landlord/dashboard/wallet",
   landlordProperty: "/landlord/dashboard/property",
@@ -23,5 +24,7 @@ export const AppRoutes = {
   landlordCreateBookings: "/landlord/dashboard/bookings/createBookings",
   landlordlistingDetails: "/landlord/dashboard/listingdetails/:id",
   landlordViewBookings: "/landlord/dashboard/viewagreement/:bookingid",
-  landlordProfile: "/landlord/dashboard/profile"
+  landlordProfile: "/landlord/dashboard/profile",
+  landlordSavings: "/landlord/dashboard/savings",
+  landlordSavingsPlan: "/landlord/dashboard/savingsplan",
 };

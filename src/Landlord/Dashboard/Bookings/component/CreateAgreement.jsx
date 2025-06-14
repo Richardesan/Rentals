@@ -81,7 +81,7 @@ const CreateAgreement = () => {
         </div>
         {propertyData && (
           <div className="bg-rental-deep/20 rounded-lg p-4 mt-14  ">
-            <BookingDetails popertydataID={propertyData.id} />
+            <BookingDetails popertydataID={propertyData} />
           </div>
         )}
       </article>

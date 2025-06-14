@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Card = ({open, balance, deposit}) => {
- function addCommas(number) {
+function addCommas(number) {
   if (!number || isNaN(Number(number))) return number;
 
   const fixed = Number(number).toFixed(2); // Ensures 2 decimal places
@@ -11,7 +11,6 @@ const Card = ({open, balance, deposit}) => {
 
   return `${formattedInt}.${decimalPart}`;
 }
-
 
   return (
     <section>

@@ -16,7 +16,6 @@ const ListingCard = ({
   price,
   location,
   firstName,
-  lastName,
   name,
   locationImage,
   status,
@@ -114,11 +113,14 @@ setReload((prev) => !prev)
       )}
 
       <article className="basis-[60%] z-10 h-60 overflow-hidden rounded-xl relative group cursor-pointer">
+          <Link to={`/landlord/dashboard/listingdetails/${id}`} className="w-full">
+
         <img
           src={locationImage[0]?.fileUrl}
           alt={locationImage[0]}
           className="w-full h-full object-cover bg-black transition-transform duration-300 transform group-hover:scale-110"
         />
+        </Link>
         <p className={`absolute capitalize text-white top-2 left-2 rounded-full px-7 text-sm font-semibold py-1 ${getTransactionTypeClass(status)}`}>
           {status}
         </p>
@@ -132,7 +134,7 @@ setReload((prev) => !prev)
         <p className="text-xl font-bold text-rental-dark/90 w-11/12">{name}</p>
 
         <div className="my-3">
-          <p className="text-base font-semibold capitalize">apartment by {firstName} {lastName}</p>
+          <p className="text-base font-semibold capitalize">apartment by {firstName}</p>
           <div className="flex gap-x-0.5 items-center">
             <img src="/distance.svg" alt="blackpin" className="object-cover w-4" />
             <p className="text-sm text-black/50">

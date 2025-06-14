@@ -20,16 +20,31 @@ function formatDateString(isoDateString) {
   return date.toLocaleDateString(undefined, options);
 }
 
-function getDurationInYears(startDateStr, endDateStr) {
+function getReadableDuration(startDateStr, endDateStr) {
   const start = new Date(startDateStr);
   const end = new Date(endDateStr);
 
   const diffInMs = end - start;
-  const msInYear = 1000 * 60 * 60 * 24 * 365.25; // accounting for leap years
-  const years = diffInMs / msInYear;
+  const msInDay = 1000 * 60 * 60 * 24;
+  const diffInDays = Math.floor(diffInMs / msInDay);
 
-  return years.toFixed(2); // returns a string like "1.25"
+  if (diffInDays < 30) {
+    return `${diffInDays} day${diffInDays !== 1 ? 's' : ''}`;
+  }
+
+  const years = Math.floor(diffInDays / 365.25);
+  const remainingDaysAfterYears = diffInDays - Math.floor(years * 365.25);
+  const months = Math.floor(remainingDaysAfterYears / 30.44);
+  const days = Math.floor(remainingDaysAfterYears % 30.44);
+
+  let parts = [];
+  if (years > 0) parts.push(`${years} year${years > 1 ? 's' : ''}`);
+  if (months > 0) parts.push(`${months} month${months > 1 ? 's' : ''}`);
+  if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+
+  return parts.join(' & ');
 }
+
 
 
   const paginate = (newDirection) => {
@@ -141,8 +156,8 @@ function getDurationInYears(startDateStr, endDateStr) {
               </p>
             </div>
             <div className=" ">
-              <p className="text-darkText/70">Renewal Option</p>
-              <p className="font-semibold text-darkText/80 mt-1">{getDurationInYears(myAgreement.startDate, myAgreement.endDate)} years</p>
+              <p className="text-darkText/70">Durtion</p>
+              <p className="font-semibold text-darkText/80 mt-1">{getReadableDuration(myAgreement.startDate, myAgreement.endDate)}</p>
             </div>
             <div className=" ">
               <p className="text-darkText/70">Description</p>

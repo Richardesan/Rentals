@@ -7,7 +7,7 @@ const GoalSetup = ({rent, handleFieldChange, startDate}) => {
     <section>
         <p className='text-2xl font-semibold text-renatal-blue'>Define Your Savings Goal</p>
       <article className=" relative w-full">
-          <p className="mb-1 font-semibold text-rental-dark/80">How much do you need?</p>
+          <p className="mb-4 font-semibold text-rental-dark/80 mt-6">How much do you need?</p>
           {rent && <span className="absolute left-3 bottom-2">₦</span>}
 
           <input
@@ -21,7 +21,7 @@ const GoalSetup = ({rent, handleFieldChange, startDate}) => {
           
         </article>
       <article className="basis-[49%]">
-          <p className="mb-1 font-semibold text-rental-dark/80">When do you want to reach this goal?</p>
+          <p className="mb-4 mt-6 font-semibold text-rental-dark/80">When do you want to reach this goal?</p>
           <input
             type="date"
             value={startDate}

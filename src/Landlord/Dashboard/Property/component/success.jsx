@@ -17,8 +17,8 @@ const Success = () => {
         <p className="mt-4 capitalize text-sm">
           Your property has been listed and is now visible to tenants.
         </p>
-        <Link to={AppRoutes.landlordDashboard} className='w-full'>
-        <button className={`mt-6 ${btnStylefull}`}>Back to Dashboard</button>
+        <Link to={AppRoutes.landlordProperty} className='w-full'>
+        <button className={`mt-6 ${btnStylefull}`}>Back to Property Listing</button>
         
         </Link>
         <p className="text-sm font-semibold text-darkText/90 mt-4">

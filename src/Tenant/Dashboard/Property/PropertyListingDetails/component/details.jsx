@@ -1,55 +1,61 @@
 import React from 'react'
+import { useAuth } from '../../../../../context/authContext'
 
 const Details = ({selectedProperty}) => {
+  const {user} = useAuth()
+  function addCommas(number) {
+  return String(number).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
   return (
     <div>
-        <h1 className="text-4xl font-bold mt-5">{selectedProperty.name}</h1>
+        <h1 className="text-4xl font-bold mt-5">{selectedProperty.title}</h1>
 
       <div className="flex justify-between items-start mt-2 py-3">
         <div>
-          <p className="text-xl  font-semibold">Apartment by <span className="capitalize">{selectedProperty.owner}</span></p>
+          <p className="text-xl mb-1 font-semibold">Apartment by <span className="capitalize">{user.firstname} {user.lastname}</span></p>
 
          <div className="flex gap-x-0.5 items-center">
             <img
-              src="/blackpin.png"
+              src="/disyellow.svg"
               alt="blackpin"
               className="object-cover w-4"
             />
 
-            <p className="text-sm text-black/50">{selectedProperty.location}</p>
+            <p className="text-sm text-black/50">{selectedProperty.address.city}, {selectedProperty.address.state}, {selectedProperty.address.country}</p>
           </div>
-            <article className="flex justify-between items-center text-sm mt-5">
+            <article className="flex justify-between items-center text-sm mt-5 w-fit gap-x-6">
             <div className="flex gap-x-0.5 items-center ">
               <img
-                src="/blackbed.png"
+                src="/bedYellow.svg"
                 alt="blackbed"
                 className="object-cover w-5"
               />
-              <p>{selectedProperty.beds} Bed{selectedProperty.beds > 1 ? "s" : ""}</p>
+              <p>{selectedProperty.numberOfBedrooms} Bed{selectedProperty.numberOfBedrooms > 1 ? "s" : ""}</p>
             </div>
             <div className="flex gap-x-0.5 items-center ">
               <img
-                src="/blackbathtub.png"
+                src="/bathtubYellow.svg"
                 alt="blackbathtub"
                 className="object-cover w-5"
               />
-              <p>{selectedProperty.bath} bath{selectedProperty.bath > 1 ? "s" : ""}</p>
+              <p>{selectedProperty.numberOfBathrooms} bath{selectedProperty.numberOfBathrooms > 1 ? "s" : ""}</p>
             </div>
             <div className="flex gap-x-0.5 items-center ">
               <img
-                src="/blackarchitecture.png"
+                src="/architectureYellow.svg"
                 alt="blackarchitecture"
                 className="object-cover w-5"
               />
-              <p>{selectedProperty.sqft} ft²</p>
+              <p>{selectedProperty.numberOfKitchen} ft²</p>
             </div>
           </article>
          
         </div>
-        <p className="text-2xl font-semibold">₦{selectedProperty.price.toLocaleString()}</p>
+        <p className="text-2xl font-semibold text-renatal-blue">₦{addCommas(selectedProperty.price.toLocaleString())}</p>
       </div>
       <h1 className="text-2xl font-semibold mt-3">Description</h1>
-      <p className="text-base w-11/12 pl-2 py-2">{selectedProperty.description}</p>
+      <p className="text-base w-9/12 pl-2 py-2 overflow-hidden break-words">{selectedProperty.description}</p>
     </div>
   )
 }

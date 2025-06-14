@@ -347,7 +347,7 @@ const PropertyForm = ({
 
               <div className="flex justify-between items-center ">
                 <p className="text-sm text-gray-600">
-                  {images.length} / 10 image{images.length < 2 ? "" : "s"}{" "}
+                  {images.length} / 6 image{images.length < 2 ? "" : "s"}{" "}
                   uploaded
                 </p>
                 <button
@@ -411,7 +411,7 @@ const PropertyForm = ({
 
               <div className="flex justify-between items-center ">
                 <p className="text-sm text-gray-600">
-                  {poofImages.length} / 5 image{poofImages.length < 2 ? "" : "s"}{" "}
+                  {poofImages.length} / 3 image{poofImages.length < 2 ? "" : "s"}{" "}
                   uploaded
                 </p>
                 <button

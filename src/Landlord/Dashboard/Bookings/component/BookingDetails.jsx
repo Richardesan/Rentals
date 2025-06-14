@@ -31,8 +31,35 @@ const BookingDetails = ({ popertydataID }) => {
 
   const btnStyle = `text-white py-2.5 px-9 rounded-lg  flex justify-center items-center capitalize font-semibold`;
 
-  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  function getReadableDuration(startDateStr, endDateStr) {
+  const start = new Date(startDateStr);
+  const end = new Date(endDateStr);
 
+  const diffInMs = end - start;
+  const msInDay = 1000 * 60 * 60 * 24;
+  const diffInDays = Math.floor(diffInMs / msInDay);
+
+  if (diffInDays < 30) {
+    return `${diffInDays} day${diffInDays !== 1 ? 's' : ''}`;
+  }
+
+  const years = Math.floor(diffInDays / 365.25);
+  const remainingDaysAfterYears = diffInDays - Math.floor(years * 365.25);
+  const months = Math.floor(remainingDaysAfterYears / 30.44);
+  const days = Math.floor(remainingDaysAfterYears % 30.44);
+
+  let parts = [];
+  if (years > 0) parts.push(`${years} year${years > 1 ? 's' : ''}`);
+  if (months > 0) parts.push(`${months} month${months > 1 ? 's' : ''}`);
+  if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+
+  return parts.join(' & ');
+}
+
+const duration = getReadableDuration(startDate, endDate)
+
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+console.log(popertydataID)
   const validate = () => {
     const newErrors = {};
 
@@ -116,22 +143,27 @@ const BookingDetails = ({ popertydataID }) => {
     }
   };
 
+  function getAgentCommission(amount) {
+  const commission = amount * 0.10;
+  return `₦${commission.toLocaleString()}`;
+}
+
+const agentCommission = getAgentCommission(popertydataID.price)
   const handleSubmit = async () => {
     if (validate()) {
       const rentAmount = Number(removeCommas(rent));
 
       const credentials = {
         tenantEmail: email,
-        listingId: popertydataID,
+        listingId: popertydataID.id,
         startDate,
         endDate,
         rentAmount,
         paymentFrequency: filter.toLowerCase(),
-        termsAndConditions: `The Landlord, [LANDLORD FULL NAME] of [LANDLORD FULL ADDRESS], through the Agent,
-         [AGENT NAME] of [AGENT FULL ADDRESS], lets the Property at [PROPERTY ADDRESS] to the Tenant, 
-         [TENANT FULL NAME] of [TENANT ADDRESS], for one (1) year from [START DATE] to [END DATE], at an 
-         annual rent of ₦[AMOUNT], payable in advance. The Tenant shall, before moving in,
-         pay a refundable security deposit of ₦[AMOUNT] and a non-refundable agent’s fee of ₦[AMOUNT], 
+        termsAndConditions: `The Landlord, ${popertydataID.landlordName} lets the Property at ${popertydataID.address.street}, ${popertydataID.address.city}, ${popertydataID.address.state}, ${popertydataID.address.country}.  to the Tenant, 
+         ${email}, for one ${duration} from ${startDate} to ${endDate}, at an 
+         ${filter.toLowerCase()} rent of ₦${rentAmount}, payable in advance. The Tenant shall, before moving in,
+         pay a refundable security deposit of ₦10000 and a non-refundable agent’s fee of ${agentCommission}, 
          representing 10% of the rent.The Property is for residential use only. The Tenant shall not sublet
           or alter the premises without written consent, must keep it in good condition, pay all utility bills, 
           and permit inspections with 24 hours’ notice. The Landlord/Agent shall ensure the Property is habitable

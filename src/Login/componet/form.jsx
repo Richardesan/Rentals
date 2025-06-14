@@ -17,7 +17,7 @@ const LoginForm = ({ userState }) => {
   const { setToken, setAuthUser, user, setUserType, userType } = useAuth();
   const navigate = useNavigate();
   const routeType =
-    userType === "landlord" ? AppRoutes.landlordDashboard : AppRoutes.dashboard;
+    userType === "landlord" ? AppRoutes.landlordProperty : AppRoutes.property;
 
   useEffect(() => {
     if (user) {

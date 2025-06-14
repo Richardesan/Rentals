@@ -41,7 +41,7 @@ const reviewArray = [
      We would  highly recommend this apartment and we shall definitely stay there again.`,
   },
 ];
-const PropertyOwner = () => {
+const PropertyOwner = ({selectedProperty}) => {
   const [filter, setFilter] = useState("Filter by");
   const [activeTab, setActiveTab] = useState("All Listings");
 
@@ -55,16 +55,17 @@ const PropertyOwner = () => {
   const renderComponent = () => {
     switch (activeTab) {
       case "All Listings":
-        return <OwnerListing />;
+        return <OwnerListing selectedProperty={selectedProperty} />;
       case "Reviews":
         return <Reviews />;
       default:
         return null;
     }
   };
+  console.log(selectedProperty)
   return (
     <div>
-      <OwenrInformation />
+      <OwenrInformation  selectedProperty={selectedProperty}/>
       <article className="flex justify-between py-3 my-5">
         <div className="flex items-center gap-x-10">
           {categories.map((category) => (

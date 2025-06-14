@@ -17,6 +17,7 @@ import Chat from "./Tenant/Dashboard/Chats/Chat";
 import ViewBookings from "./Tenant/Dashboard/Bookings/component/ViewBookings";
 import PropertyListingDetails from "./Tenant/Dashboard/Property/PropertyListingDetails/PropertyListingDetails";
 // importing landlords pages
+import LandlordSavings from "./Landlord/Dashboard/Savings/Savings";
 import LandlordDashboard from "./Landlord/Dashboard/Dashboard";
 import LandlordMyDashboard from "./Landlord/Dashboard/myDashboard";
 import LandlordProperty from "./Landlord/Dashboard/Property/Property";
@@ -29,8 +30,11 @@ import AddProperty from "./Landlord/Dashboard/Property/component/addProperty";
 import CreateAgreement from "./Landlord/Dashboard/Bookings/component/CreateAgreement";
 import LandlordViewBookings from "./Landlord/Dashboard/Bookings/component/ViewBookings";
 import Profile from "./Tenant/Dashboard/Profile/Profile";
-import SavingsPlan from "./Tenant/Dashboard/Wallet/component/savingsPlan";
+// import SavingsPlan from "./Tenant/Dashboard/Wallet/component/savingsPlan";
 import Forgot from "./Forgot/forgot";
+import LandlordSavingsPlan from "./Landlord/Dashboard/Savings/component/SavingsPlan";
+import Savings from "./Tenant/Dashboard/Savings/Savings";
+import SavingsPlan from "./Tenant/Dashboard/Savings/component/SavingsPlan";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -56,6 +60,8 @@ function Layout() {
           <Route path={AppRoutes.dashboard} element={<Dashboard />}>
             <Route path="" element={<MyDashboard />} />
             <Route path={AppRoutes.wallet} element={<Wallet />} />
+            <Route path={AppRoutes.Savings} element={<Savings />} />
+
             <Route path={AppRoutes.savingsplan} element={<SavingsPlan />} />
             <Route path={AppRoutes.viewBookings} element={<ViewBookings />} />
             <Route path={AppRoutes.property} element={<Property />} />
@@ -79,7 +85,12 @@ function Layout() {
               path={AppRoutes.landlordWallet}
               element={<LandlordWallet />}
             />
-
+            <Route
+              path={AppRoutes.landlordSavings}
+              element={<LandlordSavings />}
+            />
+            <Route 
+            path={AppRoutes.landlordSavingsPlan} element={<LandlordSavingsPlan />} />
             <Route
               path={AppRoutes.landlordBookings}
               element={<LandlordBookings />}

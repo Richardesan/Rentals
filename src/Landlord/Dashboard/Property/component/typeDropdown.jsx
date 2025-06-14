@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
 
-const filterOptions = ["Single home", "Apartment", "Condominium ", "Townhouse", "Duplex", "Bungalow", "Mansion", "Cottage"];
+const filterOptions = ["Apartment", "House", "Airbnb", "Other"];
 
 export default function PropertyTypeDrop({ selected, onChange }) {
   const [open, setOpen] = useState(false);

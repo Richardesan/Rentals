@@ -7,7 +7,7 @@ const ListLayout = ({selectedProperty}) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
-  const images = selectedProperty.locationImage;
+  const images = selectedProperty.images;
   const openViewerAt = (index) => {
     setStartIndex(index);
     setIsViewerOpen(true);
@@ -52,7 +52,7 @@ const ListLayout = ({selectedProperty}) => {
   const goRight = () => {
     if (
       startIndex !== null &&
-      startIndex < selectedProperty.locationImage.length - 1
+      startIndex < selectedProperty.images.length - 1
     ) {
       setStartIndex((prev) => prev + 1);
     }
@@ -66,7 +66,7 @@ const ListLayout = ({selectedProperty}) => {
           <AnimatePresence initial={false} custom={direction}>
             <motion.img
               key={currentIndex}
-              src={images[currentIndex]}
+              src={images[currentIndex].fileUrl}
               alt={`Image ${currentIndex + 1}`}
               custom={direction}
               variants={variants}
@@ -94,12 +94,12 @@ const ListLayout = ({selectedProperty}) => {
         <article className="basis-[20%]">
           <div
             className={`flex flex-col h-full ${
-              selectedProperty.locationImage.length < 4
+              selectedProperty.images.length < 4
                 ? "gap-y-3 justify-start"
                 : "justify-between"
             }`}
           >
-            {selectedProperty.locationImage.slice(1, 4).map((img, index) => {
+            {selectedProperty.images.slice(1, 4).map((img, index) => {
               const realIndex = index + 1; // actual index in the original array
               const isFourth = index === 2;
 
@@ -110,11 +110,11 @@ const ListLayout = ({selectedProperty}) => {
                   onClick={() => openViewerAt(realIndex)}
                 >
                   <img
-                    src={img}
+                    src={img.fileUrl}
                     alt={`Image ${realIndex + 1}`}
                     className="w-full h-[15.4rem] object-cover rounded"
                   />
-                  {isFourth && selectedProperty.locationImage.length > 4 && (
+                  {isFourth && selectedProperty.images.length > 4 && (
                     <div
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent double open
@@ -122,7 +122,7 @@ const ListLayout = ({selectedProperty}) => {
                       }}
                       className="absolute inset-0 bg-black/60 text-white flex items-center justify-center rounded text-sm font-semibold"
                     >
-                      +{selectedProperty.locationImage.length - 4} more
+                      +{selectedProperty.images.length - 4} more
                     </div>
                   )}
                 </div>
@@ -146,7 +146,7 @@ const ListLayout = ({selectedProperty}) => {
             ‹
           </button>
           <img
-            src={selectedProperty.locationImage[startIndex]}
+            src={selectedProperty.images[startIndex].fileUrl}
             alt={`Image ${startIndex + 1}`}
             className="max-w-[90%] max-h-[90%] object-contain rounded shadow"
           />
